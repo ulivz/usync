@@ -48,7 +48,9 @@ What are the benefits? In the life cycle of the whole task, you don't need to de
 - `return value`: a instance of `Usync`
 
 If `globalState` is empty, so will generate an empty state object by default
+
 If `globalState` is an object, then the first parameter of each task's handler will be the `globalState`, the second arguement will be the `next` which must be called to run the next task
+
 If `globalState` is an state Array, then the Array will be smooth, as the parameters of the controller in turn, the last arguement will be `next` function.
 
 ## Inspiration
