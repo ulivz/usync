@@ -1,6 +1,8 @@
 const READY = 0
 const PENDING = 1
 const FULFILLED = 2
+
+// TODO enhance the error trapping
 const REJECTED = 3
 
 export default class Usync {
@@ -28,7 +30,7 @@ export default class Usync {
     get $curDefferd() {
         return this.$Defferd[this.$index]
     }
-    
+
     use(handler) {
 
         this.$Defferd.push(handler)
@@ -36,9 +38,9 @@ export default class Usync {
         if (this.$Defferd.length === 1) {
             this.$state = PENDING
             this.$index = 0
-            
+
         } else {
-            // 上一个任务已经FULFILLED, 直接执行下一个任务
+            // Previous task has been FULFILLED, directly to the next task execution
             if (this.$Defferd[this.$Defferd.length - 2].__state__ === FULFILLED) {
                 this.then()
             }
@@ -57,7 +59,6 @@ export default class Usync {
 
             } else if (this.$curDefferd instanceof Usync) {
                 this.$curDefferd.FULFILLED_BROADCAST = this.$done.bind(this)
-                console.log('Start Child Task')
                 this.$curDefferd.start()
             }
 
@@ -79,6 +80,7 @@ export default class Usync {
         this.$curDefferd.__state__ = FULFILLED
         this.$index++
 
+
         if (this.$index === this.$Defferd.length) {
             this.$state = FULFILLED
             this.$Defferd = []
@@ -91,12 +93,14 @@ export default class Usync {
             return;
         }
 
-        // 同步运行调用next，此时后续任务还未被push，直接return
+        // Synchronous task call next,
+        // subsequent task at this time has not yet been push, return directly
         if (this.$curDefferd === undefined) {
             return
-
-        // 异步任务，后续任务已经push了，但还未执行，执行下一个任务
-        } else if (this.$curDefferd.__state__ === undefined) {
+        }
+        // Asynchronous task, subsequent task was already pushed
+        // but didn't execute
+        else if (this.$curDefferd.__state__ === undefined) {
             this.then()
         }
     }
