@@ -44,18 +44,19 @@ What are the benefits? In the life cycle of the whole task, you don't need to de
 
 ## API
 
-# `Usync.app(data)`
-- `data` <Array> | <Object> | <undefined>
+# `Usync.app(state)`
+- `state` Array | Object | undefined
 - `return value` a intance of Usync
 
 ```js
 var app = Usync.app()
 ```
 
-If `data` is empty, so will generate an empty `data` object by default. the `data` will shuttle throughout the whole life cycle.
+If `state` is empty, so will generate an empty `state` object by default. the `state` will shuttle throughout the whole life cycle.
+
 
 # `app.use(taskHandler)`
-- `taskHandler` <Function> | <Usync Instance>
+- `taskHandler` Function | Usync Instance
 - `return value` this
 
 if the task handler is a function, the parameters of the function as follows:
