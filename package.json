@@ -1,6 +1,6 @@
 {
     "name": "usync",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A lightweight library used for clearer task control",
     "main": "",
     "scripts": {
@@ -26,8 +26,5 @@
         "yargs": "^7.0.2"
     },
     "author": "toxichl",
-    "license": "MIT",
-    "bin": {
-        "ct": "build/build"
-    }
+    "license": "MIT"
 }

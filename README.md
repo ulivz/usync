@@ -1,13 +1,14 @@
 # Usync
+Strict serial task control 
 
 ## Usages
 
 Here are three tasks that may contain asynchronous code
 
 ```js
-function Task1() {}
-function Task2() {}
-function Task3() {}
+function task1() {}
+function task2() {}
+function task3() {}
 ```
 
 If the three tasks share one or more global state, and needs to be strictly executed serially, This time, you will need Usync:
@@ -18,18 +19,18 @@ If the three tasks share one or more global state, and needs to be strictly exec
 var app = Usync.app(state)
 
 // Define task execution order
-app.use(Task1)
-   .use(Task2)
-   .use(Task3)
+app.use(task1)
+   .use(task2)
+   .use(task3)
     
 // Run app 
 app.start()  
 ```
 
-At this point, you can added some arguements to each task control function (`next` style likes `generator`):
+At this point, you can write task controller like this (`next` style likes `generator` ?):
 
 ```js
-function Task1(state, next) {
+function task1(state, next) {
     // ... Async or Sync Code
     
     // run next task
@@ -43,16 +44,56 @@ What are the benefits? In the life cycle of the whole task, you don't need to de
 
 ## API
 
-### Usync.app(globalState)
-- `globalState`: state objects needed in task lifecycle (<Array/Object/undefined>)
-- `return value`: a instance of `Usync`
+# `Usync.app(data)`
+- `data` <Array> | <Object> | <undefined>
+- `return value` a intance of Usync
 
-If `globalState` is empty, so will generate an empty state object by default
+```js
+var app = Usync.app()
+```
 
-If `globalState` is an object, then the first parameter of each task's handler will be the `globalState`, the second arguement will be the `next` which must be called to run the next task
+If `data` is empty, so will generate an empty `data` object by default. the `data` will shuttle throughout the whole life cycle.
 
-If `globalState` is an state Array, then the Array will be smooth, as the parameters of the controller in turn, the last arguement will be `next` function.
+# `app.use(taskHandler)`
+- `taskHandler` <Function> | <Usync Instance>
+- `return value` this
 
-## Inspiration
+if the task handler is a function, the parameters of the function as follows:
 
-Koa / Promise / Generator
+    state1 , state2, ... , next
+
+The number of state parameters depends on the number of object passed in at initialization.
+
+If you initialize as follows:
+
+    var app = Usync.app(A)
+    
+then You can write your task handler like this:
+
+```js
+function task(A , next) {
+    // Do something
+    
+    // Call next() to execute the next task
+    next()  
+}
+
+app.use(task)
+```
+
+And if you write this:
+
+    var app = Usync.app(A, B, C)
+    
+You can use:
+
+```js
+function task(A, B, C, next) {
+    // Do something
+    
+    // Call next() to execute the next task
+    next()  
+}
+
+app.use(task)
+```
