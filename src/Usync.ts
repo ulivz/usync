@@ -20,7 +20,7 @@ type IState = string | IObject | IObject[];
 
 class Usync {
 
-    private core: IObject;
+    private root: IObject;
     private vessel: IObject;
     private defferd: IHandler[];
     private index: number;
@@ -37,9 +37,9 @@ class Usync {
 
     constructor(state: IState, options?: IOptions) {
 
-        this.core = Array.isArray(state) ? state :
-               typeof state === 'string' ? ((this.name(state)) && <IObject>{}) :
-               typeof state === 'object' ? [state] : <IObject>{}
+        this.root = Array.isArray(state) ? state :
+                typeof state === 'string' ? ((this.name(state)) && <IObject>{}) :
+                typeof state === 'object' ? [state] : <IObject>{}
 
         options = assign({}, options)
 
@@ -47,7 +47,7 @@ class Usync {
             this.name(options.name)
         }
 
-        this.core.$name = this.__name__
+        this.root.$name = this.__name__
 
         this.defferd = []
         this.index = -1
@@ -58,12 +58,23 @@ class Usync {
         return <IHandler>this.defferd[this.index]
     }
 
+    get prevDefferd() {
+        return <IHandler>this.defferd[this.index - 1]
+    }
+
     public name(name: string) {
         this.__name__ = name
         return this
     }
 
-    public use(handler: IHandler) {
+    public use(handler: IHandler | IHandler[]) {
+
+        if (Array.isArray(handler)) {
+            for (let childHandler of handler) {
+                this.use(childHandler)
+            }
+            return;
+        }
 
         this.defferd.push(handler)
 
@@ -84,10 +95,10 @@ class Usync {
     private then() {
         // Add Support for time record
         let time = new Date().getTime()
-        this.core.$time = time - this.startTime
+        this.root.$time = time - this.startTime
         this.startTime = time
 
-        let argues = [this.core].concat(this.done.bind(this))
+        let argues = [this.root].concat(this.done.bind(this))
 
         try {
 
@@ -102,7 +113,7 @@ class Usync {
         } catch (err) {
 
             if (this.catch) {
-                let errArgues = [err].concat([this.core], this.done.bind(this))
+                let errArgues = [err].concat([this.root], this.done.bind(this))
                 this.catch.apply(this, errArgues)
 
             } else {
@@ -157,12 +168,20 @@ class Usync {
     }
 
     HOOK_START() {
-        Usync.lifecycleList.start.forEach(start => start.call(this, this.core))
+        this.lifecycleList.start.forEach(start => start.call(this, this.root))
     }
 
     HOOK_END() {
-        Usync.lifecycleList.end.forEach(end => end.call(this, this.core))
+        this.lifecycleList.end.forEach(end => end.call(this, this.root))
     }
+
+    private lifecycleList = (function () {
+        let list = <ILifecycleList>{}
+        for (let cycle of Object.keys(LIFE_CYCLE)) {
+            list[cycle] = []
+        }
+        return <ILifecycleList>list;
+    })();
 
     static createApp(state: IState) {
         return new Usync(state)
@@ -170,16 +189,16 @@ class Usync {
 
     static lifecycleList: ILifecycleList = (function () {
         let list = <ILifecycleList>{}
-        for(let cycle of Object.keys(LIFE_CYCLE)){
+        for (let cycle of Object.keys(LIFE_CYCLE)) {
             list[cycle] = []
         }
         return <ILifecycleList>list;
     })();
 
-    static lifecycle(hooks: ILifeCycle) {
-        for (let key of Object.keys(Usync.lifecycleList)) {
+    lifecycle(hooks: ILifeCycle) {
+        for (let key of Object.keys(this.lifecycleList)) {
             if (hooks[key]) {
-                Usync.lifecycleList[key].push(hooks[key])
+                this.lifecycleList[key].push(hooks[key])
             }
         }
     }

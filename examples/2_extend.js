@@ -1,6 +1,8 @@
 var Usync = require('../dist/Usync')
 
-Usync.lifecycle({
+var app = Usync.createApp('Plugin')
+
+app.lifecycle({
     start(root) {
         console.log(`Start ${root.$name}`)
     },
@@ -8,8 +10,6 @@ Usync.lifecycle({
         console.log(`Finished ${root.$name}`)
     }
 })
-
-var app = Usync.createApp('Plugin')
 
 var task1 = (root, next) => {
     root.name = 'Usync'
@@ -25,9 +25,15 @@ var task2 = (root, next) => {
 
 var task3 = (root, next) => {
     console.log('Task 3')
+    console.log(root)
+    console.log(app)
     next()
 }
 
-app.use(task1).use(task2).use(task3)
+app.use([
+    task3,
+    task2,
+    task1,
+])
 
 module.exports = app

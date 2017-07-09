@@ -95,14 +95,22 @@ var LIFE_CYCLE = {
 };
 var Usync = (function () {
     function Usync(state, options) {
-        this.core = Array.isArray(state) ? state :
+        this.lifecycleList = (function () {
+            var list = {};
+            for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
+                var cycle = _a[_i];
+                list[cycle] = [];
+            }
+            return list;
+        })();
+        this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.name(state)) && {}) :
                 typeof state === 'object' ? [state] : {};
         options = utils_1.assign({}, options);
         if (options.name) {
             this.name(options.name);
         }
-        this.core.$name = this.__name__;
+        this.root.$name = this.__name__;
         this.defferd = [];
         this.index = -1;
         this.state = STATE.READY;
@@ -117,11 +125,25 @@ var Usync = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Usync.prototype, "prevDefferd", {
+        get: function () {
+            return this.defferd[this.index - 1];
+        },
+        enumerable: true,
+        configurable: true
+    });
     Usync.prototype.name = function (name) {
         this.__name__ = name;
         return this;
     };
     Usync.prototype.use = function (handler) {
+        if (Array.isArray(handler)) {
+            for (var _i = 0, handler_1 = handler; _i < handler_1.length; _i++) {
+                var childHandler = handler_1[_i];
+                this.use(childHandler);
+            }
+            return;
+        }
         this.defferd.push(handler);
         if (this.defferd.length === 1) {
             this.state = STATE.PENDING;
@@ -138,9 +160,9 @@ var Usync = (function () {
     Usync.prototype.then = function () {
         // Add Support for time record
         var time = new Date().getTime();
-        this.core.$time = time - this.startTime;
+        this.root.$time = time - this.startTime;
         this.startTime = time;
-        var argues = [this.core].concat(this.done.bind(this));
+        var argues = [this.root].concat(this.done.bind(this));
         try {
             if (typeof this.currentDefferd === 'function') {
                 this.currentDefferd.apply(this, argues);
@@ -152,7 +174,7 @@ var Usync = (function () {
         }
         catch (err) {
             if (this.catch) {
-                var errArgues = [err].concat([this.core], this.done.bind(this));
+                var errArgues = [err].concat([this.root], this.done.bind(this));
                 this.catch.apply(this, errArgues);
             }
             else {
@@ -196,20 +218,20 @@ var Usync = (function () {
     };
     Usync.prototype.HOOK_START = function () {
         var _this = this;
-        Usync.lifecycleList.start.forEach(function (start) { return start.call(_this, _this.core); });
+        this.lifecycleList.start.forEach(function (start) { return start.call(_this, _this.root); });
     };
     Usync.prototype.HOOK_END = function () {
         var _this = this;
-        Usync.lifecycleList.end.forEach(function (end) { return end.call(_this, _this.core); });
+        this.lifecycleList.end.forEach(function (end) { return end.call(_this, _this.root); });
     };
     Usync.createApp = function (state) {
         return new Usync(state);
     };
-    Usync.lifecycle = function (hooks) {
-        for (var _i = 0, _a = Object.keys(Usync.lifecycleList); _i < _a.length; _i++) {
+    Usync.prototype.lifecycle = function (hooks) {
+        for (var _i = 0, _a = Object.keys(this.lifecycleList); _i < _a.length; _i++) {
             var key = _a[_i];
             if (hooks[key]) {
-                Usync.lifecycleList[key].push(hooks[key]);
+                this.lifecycleList[key].push(hooks[key]);
             }
         }
     };
