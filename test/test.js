@@ -1,6 +1,6 @@
 var Usync = require('../dist/Usync')
 
-var addVersion = (U) => {
+var addVersion = (U, next) => {
     U.version = '1.0.0'
     console.log('Parent - 1')
     setTimeout(w => {
@@ -37,6 +37,7 @@ var childApp1 = Usync.app()
         console.log('Child - End')
         U.next()
     })
+
 
 var app = Usync.app(U)
     .use(addVersion)

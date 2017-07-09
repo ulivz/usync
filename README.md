@@ -33,7 +33,7 @@ At this point, you can write task controller like this (`next` style likes `gene
 function task1(state, next) {
     // ... Async or Sync Code
     
-    // run next task
+    // Call next() to execute the next task
     next()
 }
 ```
@@ -45,7 +45,7 @@ What are the benefits? In the life cycle of the whole task, you don't need to de
 ## API
 
 # `Usync.app(state)`
-- `state` Array | Object | undefined
+- `state` Array | Object | String | undefined
 - `return value` a intance of Usync
 
 ```js
@@ -75,7 +75,6 @@ then You can write your task handler like this:
 function task(A , next) {
     // Do something
     
-    // Call next() to execute the next task
     next()  
 }
 
@@ -92,7 +91,6 @@ You can use:
 function task(A, B, C, next) {
     // Do something
     
-    // Call next() to execute the next task
     next()  
 }
 
