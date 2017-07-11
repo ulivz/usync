@@ -34,7 +34,7 @@ fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(pack
 // 2. Remove old file
 logger.out('info', 'Remove old dist')
 shell.rm('-rf', config.prod.output.path)
-shell.rm('-p', config.prod.output.path)
+shell.mkdir('-p', config.prod.output.path)
 
 // 3. Build file
 logger.out('info', 'Build library')
