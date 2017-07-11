@@ -30,20 +30,20 @@ const config = {
         {
             type: 'success',
             typeColor: 'redBright',
-            msgColor: 'yellowBright'
+            msgColor: 'yellow'
         },
         {
             type: 'warning',
             typeColor: 'red',
-            msgColor: 'yellowBright'
+            msgColor: 'yellow'
         }
     ],
     custom: {
         msg: {
-            defalut: 'yellowBright'
+            defalut: 'yellow'
         },
         type: {
-            defalut: 'yellowBright'
+            defalut: 'cyanBright'
         },
 
     }
@@ -55,17 +55,17 @@ function log(msg) {
     console.log()
 }
 
-
 function wrap(msg) {
     return WRAP.defalut.replace('*', msg)
 }
 
 function out(type, msg) {
     var _config = config.out.find(item => item.type === type)
-    log(INDENT + chalk[_config.typeColor](wrap(type.toUpperCase())) + SPACE + chalk[_config.msgColor](msg))
+    log(INDENT + chalk[_config ? _config.typeColor : config.custom.type.defalut](wrap(type.toUpperCase())) +
+        SPACE + chalk[_config ? _config.msgColor : config.custom.msg.defalut](msg))
 }
 
-function custom(msg, options) {
+exports.custom = function (msg, options) {
     var output = '', outputType = '', outMsg = ''
 
     if (options) {
@@ -80,7 +80,4 @@ function custom(msg, options) {
     log(output)
 }
 
-module.exports = {
-    out,
-    custom
-}
+module.exports = out

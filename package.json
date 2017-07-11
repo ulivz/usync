@@ -8,7 +8,7 @@
     "build": "node build/build.js -p",
     "devtool": "devtool examples/index.js --watch",
     "example": "node examples/index.js",
-    "release": "node build/release.js"
+    "help": "node build/help.js"
   },
   "devDependencies": {
     "chalk": "^2.0.1",
