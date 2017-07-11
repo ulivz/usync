@@ -4,7 +4,7 @@ var argv = require('yargs').argv
 var log = require('./logger')
 var draw = require('./utils').drawPackageName
 
-if (!argv.commit) {
+if (!argv.commit || argv.commit === true) {
     log('error', 'No commit content')
     exit()
 }
