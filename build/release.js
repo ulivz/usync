@@ -43,13 +43,11 @@ shell.exec('npm run build')
 // 4. Github
 logger.out('info', 'Github Release')
 
-shell.exec('git add .')
-shell.exec('git commit -m "[Version Update] Released ' + argv.version + '"')
-shell.exec('git push', function (code, stdout, stderr) {
+shell.exec('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push', function (code, stdout, stderr) {
     if (code === 0) {
         logger.out('success', 'Github release successfully')
     } else {
-        process.stdout.pipe(stderr)
+        process.stdout.write(stderr)
         process.exit(0)
     }
 })
@@ -59,7 +57,7 @@ shell.exec('npm publish', function (code, stdout, stderr) {
     if (code === 0) {
         logger.out('success', 'npm release successfully')
     } else {
-        process.stdout.pipe(stderr)
+        process.stdout.write(stderr)
         process.exit(0)
     }
 })
