@@ -47,21 +47,23 @@ shell.exec('git add . && git commit -m "[Version Update] Released ' + argv.versi
     console.log(code)
     if (code === 0) {
         logger.out('success', 'Github release successfully')
+
+        // 5. NPM
+        shell.exec('npm publish', function (code, stdout, stderr) {
+            if (code === 0) {
+                logger.out('success', 'npm release successfully')
+            } else {
+                process.stdout.write(stderr)
+                process.exit(0)
+            }
+        })
+
     } else {
         process.stdout.write(stderr)
         process.exit(0)
     }
 })
 
-// 5. NPM
-shell.exec('npm publish', function (code, stdout, stderr) {
-    if (code === 0) {
-        logger.out('success', 'npm release successfully')
-    } else {
-        process.stdout.write(stderr)
-        process.exit(0)
-    }
-})
 
 function checkVersion(oldVersion, newVersion) {
     var older = parseInt(oldVersion.split('.').join(''))
