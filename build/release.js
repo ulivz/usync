@@ -5,6 +5,7 @@ var argv = require('yargs').argv
 var logger = require('./logger')
 var fs = require('fs')
 var path = require('path')
+var config = require('./config')
 
 logger.out('info', 'Current Version: ' + version)
 
@@ -30,11 +31,38 @@ var packageJSON = require('../package.json')
 packageJSON.version = argv.version
 fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(packageJSON, null, 2), 'utf-8')
 
+// 2. Remove old file
+logger.out('info', 'Remove old dist')
+shell.rm('-rf', config.prod.output.path)
+shell.rm('-p', config.prod.output.path)
 
-// 2. Github
+// 3. Build file
+logger.out('info', 'Build library')
+shell.exec('npm run build')
+
+// 4. Github
+logger.out('info', 'Github Release')
+
 shell.exec('git add .')
-shell.exec('git commit -m Released' + argv.version)
-shell.exec('git push')
+shell.exec('git commit -m "[Version Update] Released ' + argv.version + '"')
+shell.exec('git push', function (code, stdout, stderr) {
+    if (code === 0) {
+        logger.out('success', 'Github release successfully')
+    } else {
+        process.stdout.pipe(stderr)
+        process.exit(0)
+    }
+})
+
+// 5. NPM
+shell.exec('npm publish', function (code, stdout, stderr) {
+    if (code === 0) {
+        logger.out('success', 'npm release successfully')
+    } else {
+        process.stdout.pipe(stderr)
+        process.exit(0)
+    }
+})
 
 function checkVersion(oldVersion, newVersion) {
     var older = parseInt(oldVersion.split('.').join(''))
