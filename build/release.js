@@ -11,6 +11,7 @@ var path = require('path')
 var config = require('./config')
 var exec = require('./utils').exec
 var exit = require('./utils').exit
+var checkVersion = require('./utils').checkVersion
 
 log('info', 'Current Version: ' + version)
 
@@ -37,8 +38,8 @@ packageJSON.version = argv.version
 fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(packageJSON, null, 2), 'utf-8')
 
 // 2. Remove old file
-exec('rm -rf config.prod.output.path')
-exec('mkdir config.prod.output.path')
+exec('rm -rf ' + config.prod.output.path)
+exec('mkdir' + config.prod.output.path)
 
 // 3. Build file
 log('info', 'Build file ')
@@ -53,14 +54,5 @@ exec('git push')
 // 5. Github
 log('info', 'Start to release to NPM ')
 exec('npm publish')
-
-function checkVersion(oldVersion, newVersion) {
-    var older = parseInt(oldVersion.split('.').join(''))
-    var newer = parseInt(newVersion.split('.').join(''))
-    if (newer - older !== 1) {
-        return false
-    }
-    return true
-}
 
 exit()

@@ -14,6 +14,15 @@ function exit(err) {
     process.exit(0)
 }
 
+function checkVersion(oldVersion, newVersion) {
+    var older = parseInt(oldVersion.split('.').join(''))
+    var newer = parseInt(newVersion.split('.').join(''))
+    if (newer - older !== 1) {
+        return false
+    }
+    return true
+}
+
 module.exports = {
     exec,
     exit

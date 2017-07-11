@@ -4,6 +4,7 @@ var ora = require('ora')
 var chalk = require('chalk')
 var webpackConf, env
 var figlet = require('figlet')
+var log = require('logger')
 
 if (process.argv.indexOf(config.prod.argv) >= 0) {
     env = 'prod'
@@ -17,7 +18,7 @@ if (process.argv.indexOf(config.prod.argv) >= 0) {
     build(webpackConf)
 
 } else {
-    console.log('  ' + chalk.red('[Error]') + chalk.yellow(' Need to set env'))
+    log('error', 'Need to set env')
     process.exit(0)
 }
 
