@@ -65,10 +65,16 @@ function out(type, msg) {
         SPACE + chalk[_config ? _config.msgColor : config.custom.msg.defalut](msg))
 }
 
+// Static function
 out.chalk = function (color, content) {
     console.log(require('chalk')[color](content))
 }
 
+out.one = function (content) {
+    console.log(chalk.cyanBright(content))
+}
+
+// Static function
 out.custom = function (msg, options) {
     var output = '', outputType = '', outMsg = ''
 

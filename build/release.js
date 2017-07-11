@@ -1,6 +1,6 @@
 /**
  * Release v0.0.1
- * Please don't use this file at Windows
+ * Please don't execute this file at Windows system
  */
 var package = require('../package.json')
 var version = package.version
