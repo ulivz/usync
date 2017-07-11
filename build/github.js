@@ -2,6 +2,7 @@ var exec = require('./utils').exec
 var exit = require('./utils').exit
 var argv = require('yargs').argv
 var log = require('./logger')
+var draw = require('./utils').drawPackageName
 
 if (!argv.commit) {
     log('error', 'No commit content')
@@ -9,5 +10,8 @@ if (!argv.commit) {
 }
 
 exec('git add .')
-exec('git commit -m "[' + require('../package.json').name + '] ' + argv.commit + '"')
+exec('git commit -m "' + argv.commit + '"')
 exec('git push')
+
+draw()
+

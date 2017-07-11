@@ -65,7 +65,11 @@ function out(type, msg) {
         SPACE + chalk[_config ? _config.msgColor : config.custom.msg.defalut](msg))
 }
 
-exports.custom = function (msg, options) {
+out.chalk = function (color, content) {
+    console.log(require('chalk')[color](content))
+}
+
+out.custom = function (msg, options) {
     var output = '', outputType = '', outMsg = ''
 
     if (options) {

@@ -12,6 +12,7 @@ var config = require('./config')
 var exec = require('./utils').exec
 var exit = require('./utils').exit
 var checkVersion = require('./utils').checkVersion
+var draw = require('./utils').drawPackageName
 
 log('info', 'Current Version: ' + version)
 
@@ -54,5 +55,6 @@ exec('git push')
 // 5. Github
 log('info', 'Start to release to NPM ')
 exec('npm publish')
+draw()
 
 exit()

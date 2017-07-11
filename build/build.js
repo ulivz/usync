@@ -1,61 +1,35 @@
 var config = require('./config')
 var webpack = require('webpack')
 var ora = require('ora')
-var chalk = require('chalk')
 var webpackConf, env
-var figlet = require('figlet')
-var log = require('logger')
+var log = require('./logger')
+var compile = require('./utils').webpackCompile
+var drawPackageName = require('./utils').drawPackageName
+
+var env
+
+function conf(env) {
+    return './webpack.' + env + '.conf';
+}
 
 if (process.argv.indexOf(config.prod.argv) >= 0) {
     env = 'prod'
     webpackConf = require(conf(env))()
-    build(webpackConf)
-    build(require(conf('dev'))(), drawUSYNC)
+    compile(webpackConf)
+    compile(require(conf('dev'))(), drawPackageName)
 
 } else if (process.argv.indexOf(config.dev.argv) >= 0) {
     env = 'dev'
     webpackConf = require(conf(env))({watch: true})
-    build(webpackConf)
+    compile(webpackConf)
 
 } else {
     log('error', 'Need to set env')
     process.exit(0)
 }
 
-function conf(env) {
-    return './webpack.' + env + '.conf';
-}
 
-function drawUSYNC() {
-    figlet('USYNC', {
-            horizontalLayout: 'fitted',
-        },
-        function (err, data) {
-            if (err) {
-                console.log('Something went wrong...');
-                console.dir(err);
-                return;
-            }
-            console.log(data)
-        });
-}
 
-function build(webpackConf, callback) {
 
-    var spinner = ora('Building for ' + env + '...')
-    spinner.start()
 
-    webpack(webpackConf, function (err, stats) {
-        spinner.stop()
-        if (err) throw err
-        process.stdout.write(stats.toString({
-                colors: true,
-                modules: false,
-                children: false,
-                chunks: false,
-                chunkModules: false
-            }) + '\n\n')
-        console.log(chalk.cyan('  ' + webpackConf.output.filename + ' Build complete.\n'))
-        callback && callback()
-    })
-}
+
