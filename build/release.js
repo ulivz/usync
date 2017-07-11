@@ -41,7 +41,7 @@ logger.out('info', 'Build library')
 shell.exec('npm run build')
 
 // 4. Github
-logger.out('info', 'Github Release')
+logger.out('info', 'Start release to Github ')
 
 shell.exec('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push', function (code, stdout, stderr) {
     console.log(code)
