@@ -1,4 +1,6 @@
-<div style="text-aligh: center; width: 60%; margin: 0 auto; background-color: #fff;">
+<p aligh="center">Usync</div>
+
+<p aligh="center">
     <pre style="background-color: #fff;">
       _   _  ____ __   __ _   _   ____
      | | | |/ ___|\ \ / /| \ | | / ___|
