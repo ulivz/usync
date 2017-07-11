@@ -64,7 +64,6 @@ function checkVersion(oldVersion, newVersion) {
 }
 
 function exit(err) {
-    console.log()
     if (err) {
         process.stdout.write(err)
     }
