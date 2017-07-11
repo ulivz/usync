@@ -41,31 +41,18 @@ logger.out('info', 'Build library')
 shell.exec('npm run build')
 
 // 4. Github
-logger.out('info', 'Start release to Github ')
+logger.out('info', 'Start to release to Github ')
 
-console.log('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push')
+exec('git add .')
+exec('git commit -m "[Train Conductor] Release ' + argv.version + '"')
+exec('git push')
+exec('npm publish')
 
-shell.exec('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push', function (code, stdout, stderr) {
-    console.log(code)
-    if (code === 0) {
-        logger.out('success', 'Github release successfully')
-
-        // 5. NPM
-        shell.exec('npm publish', function (code, stdout, stderr) {
-            if (code === 0) {
-                logger.out('success', 'npm release successfully')
-            } else {
-                process.stdout.write(stderr)
-                process.exit(0)
-            }
-        })
-
-    } else {
-        process.stdout.write(stderr)
-        process.exit(0)
-    }
-})
-
+function exec(command) {
+    logger.out('info', 'Start ' + command)
+    shell.exec(command)
+    logger.out('success', 'End ' + command)
+}
 
 function checkVersion(oldVersion, newVersion) {
     var older = parseInt(oldVersion.split('.').join(''))
@@ -76,8 +63,11 @@ function checkVersion(oldVersion, newVersion) {
     return true
 }
 
-function exit() {
+function exit(err) {
     console.log()
+    if (err) {
+        process.stdout.write(err)
+    }
     process.exit(0)
 }
 

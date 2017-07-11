@@ -54,7 +54,7 @@ function build(webpackConf, callback) {
                 chunks: false,
                 chunkModules: false
             }) + '\n\n')
-        console.log(chalk.cyan('  ' + config[env].output.filename + ' Build complete.\n'))
+        console.log(chalk.cyan('  ' + webpackConf.output.filename + ' Build complete.\n'))
         callback && callback()
     })
 }
