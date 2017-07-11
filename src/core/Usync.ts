@@ -1,5 +1,5 @@
 import {assign} from '../utils/utils'
-import {initLifecycle} from './lifeCycle'
+import lifeCycle from './lifeCycle'
 import {IObject, IOptions, IBaseHandler, IFunction, ILifeCycle} from '../interface/interface'
 
 enum STATE {
@@ -12,7 +12,7 @@ enum STATE {
 type IHandler = Usync | IBaseHandler;
 type IState = string | IObject | IObject[];
 
-export default class Usync {
+export class Usync {
 
     private root: IObject;
     private vessel: IObject = {};
@@ -204,14 +204,14 @@ export default class Usync {
         }
     }
 
-    private lifecycleList = initLifecycle();
+    private lifecycleList = lifeCycle.init();
 
     static createApp(state: IState) {
         return new Usync(state)
     }
 
     static extend(hooks: ILifeCycle) {
-        Usync.prototype.lifecycleList = initLifecycle();
+        Usync.prototype.lifecycleList = lifeCycle.init();
         Usync.prototype.extend.call(Usync.prototype, hooks)
     }
 

@@ -1,2 +1,3 @@
-import Usync from './core/Usync'
-export default Usync
+/// <reference path="./index.d.ts" />
+import {Usync} from './core/Usync';
+module.exports = Usync;

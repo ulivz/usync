@@ -3,6 +3,8 @@ var fs = require('fs')
 var path = require('path')
 var examples = fs.readdirSync(__dirname)
 
+console.log(Usync)
+
 Usync.extend({
     // appStart(root) {
     //     console.log(`Start ${root.$name}`)

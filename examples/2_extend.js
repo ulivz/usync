@@ -6,8 +6,6 @@ var task4 = (root, next) => {
     setTimeout(() => next(), 1000)
 }
 
-console.log(Object.prototype.toString.call(task4))
-
 var task5 = (root, next) => {
     setTimeout(() => next(), 1000)
 }

@@ -7,10 +7,13 @@ const LIFE_CYCLE = {
     appEnd: 4
 }
 
-export function initLifecycle() {
-    let list = <ILifecycleMap>{}
-    for (let cycle of Object.keys(LIFE_CYCLE)) {
-        list[cycle + 'Quene'] = []
+export default {
+    init () {
+        let list = <ILifecycleMap>{}
+        for (let cycle of Object.keys(LIFE_CYCLE)) {
+            list[cycle + 'Quene'] = []
+        }
+        return <ILifecycleMap>list;
     }
-    return <ILifecycleMap>list;
 }
+

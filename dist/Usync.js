@@ -80,8 +80,9 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="./index.d.ts" />
 var Usync_1 = __webpack_require__(1);
-exports.default = Usync_1.default;
+module.exports = Usync_1.Usync;
 
 
 /***/ }),
@@ -103,7 +104,7 @@ var STATE;
 var Usync = (function () {
     function Usync(state, options) {
         this.vessel = {};
-        this.lifecycleList = lifeCycle_1.initLifecycle();
+        this.lifecycleList = lifeCycle_1.default.init();
         this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.setName(state)) && {}) :
                 typeof state === 'object' ? [state] : {};
@@ -262,12 +263,12 @@ var Usync = (function () {
         return new Usync(state);
     };
     Usync.extend = function (hooks) {
-        Usync.prototype.lifecycleList = lifeCycle_1.initLifecycle();
+        Usync.prototype.lifecycleList = lifeCycle_1.default.init();
         Usync.prototype.extend.call(Usync.prototype, hooks);
     };
     return Usync;
 }());
-exports.default = Usync;
+exports.Usync = Usync;
 
 
 /***/ }),
@@ -315,15 +316,16 @@ var LIFE_CYCLE = {
     taskEnd: 3,
     appEnd: 4
 };
-function initLifecycle() {
-    var list = {};
-    for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
-        var cycle = _a[_i];
-        list[cycle + 'Quene'] = [];
+exports.default = {
+    init: function () {
+        var list = {};
+        for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
+            var cycle = _a[_i];
+            list[cycle + 'Quene'] = [];
+        }
+        return list;
     }
-    return list;
-}
-exports.initLifecycle = initLifecycle;
+};
 
 
 /***/ })
