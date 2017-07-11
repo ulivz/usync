@@ -43,6 +43,8 @@ shell.exec('npm run build')
 // 4. Github
 logger.out('info', 'Start release to Github ')
 
+console.log('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push')
+
 shell.exec('git add . && git commit -m "[Version Update] Released ' + argv.version + '" && git push', function (code, stdout, stderr) {
     console.log(code)
     if (code === 0) {
