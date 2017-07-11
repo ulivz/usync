@@ -1,5 +1,5 @@
-<div>
-    <pre style="text-aligh: center; width: 60%; margin: 0 auto; background-color: #fff;">
+<div style="text-aligh: center; width: 60%; margin: 0 auto; background-color: #fff;">
+    <pre style="background-color: #fff;">
       _   _  ____ __   __ _   _   ____
      | | | |/ ___|\ \ / /| \ | | / ___|
      | | | |\___ \ \ V / |  \| || |
