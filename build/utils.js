@@ -25,5 +25,6 @@ function checkVersion(oldVersion, newVersion) {
 
 module.exports = {
     exec,
-    exit
+    exit,
+    checkVersion
 }
