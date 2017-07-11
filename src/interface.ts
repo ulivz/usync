@@ -11,24 +11,19 @@ export interface IOptions {
 export interface IBaseHandler {
     (): any;
     __state__: number;
+    duration: number;
+    startTime?: number;
+    endTime?: number;
 }
 
 export interface IFunction {
-    (): any;
+    (param: any): any;
 }
 
-export interface ILifecycleList {
-    [key: string]: any;
-    start: IFunction[];
-    taskStart: IFunction[];
-    taskEnd: IFunction[];
-    end: IFunction[]
-    // start: ((...fn: IFunction[]) => void)[];
-    // end: (() => void)[];
+export interface ILifecycleMap {
+    [key: string]: IFunction[];
 }
 
 export interface ILifeCycle {
-    [key: string]: any;
-    start?(): void;
-    end?(): void;
+    [key: string]: IFunction;
 }

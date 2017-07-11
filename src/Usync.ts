@@ -1,5 +1,5 @@
 import {assign} from './utils'
-import {IObject, IOptions, IBaseHandler, IFunction, ILifecycleList, ILifeCycle} from './interface'
+import {IObject, IOptions, IBaseHandler, IFunction, ILifecycleMap, ILifeCycle} from './interface'
 
 enum STATE {
     READY = 0,
@@ -9,24 +9,33 @@ enum STATE {
 }
 
 const LIFE_CYCLE = {
-    start: 1,
+    appStart: 1,
     taskStart: 2,
     taskEnd: 3,
-    end: 4
+    appEnd: 4
 }
 
 type IHandler = Usync | IBaseHandler;
 type IState = string | IObject | IObject[];
 
+function initLifecycle() {
+    let list = <ILifecycleMap>{}
+    for (let cycle of Object.keys(LIFE_CYCLE)) {
+        list[cycle + 'Quene'] = []
+    }
+    return <ILifecycleMap>list;
+}
+
 class Usync {
 
     private root: IObject;
-    private vessel: IObject;
+    // private vessel: IObject = {};
     private defferd: IHandler[];
     private index: number;
 
     public state: number;
     public startTime: number;
+    public endTime: number;
     public __name__: string;
     public __state__: number;
 
@@ -38,13 +47,13 @@ class Usync {
     constructor(state: IState, options?: IOptions) {
 
         this.root = Array.isArray(state) ? state :
-                typeof state === 'string' ? ((this.name(state)) && <IObject>{}) :
+                typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
                 typeof state === 'object' ? [state] : <IObject>{}
 
         options = assign({}, options)
 
         if (<string>options.name) {
-            this.name(options.name)
+            this.setName(options.name)
         }
 
         this.root.$name = this.__name__
@@ -62,9 +71,17 @@ class Usync {
         return <IHandler>this.defferd[this.index - 1]
     }
 
-    public name(name: string) {
+    get nextDefferd() {
+        return <IHandler>this.defferd[this.index + 1]
+    }
+
+    public setName(name: string) {
         this.__name__ = name
         return this
+    }
+
+    get name() {
+        return this.__name__
     }
 
     public use(handler: IHandler | IHandler[]) {
@@ -94,13 +111,14 @@ class Usync {
 
     private then() {
         // Add Support for time record
-        let time = new Date().getTime()
-        this.root.$time = time - this.startTime
-        this.startTime = time
+        this.currentDefferd.startTime = new Date().getTime()
 
         let argues = [this.root].concat(this.done.bind(this))
 
         try {
+
+            this.setRootProperty()
+            this.runHookByName('taskStart')
 
             if (typeof this.currentDefferd === 'function') {
                 this.currentDefferd.apply(this, argues)
@@ -123,9 +141,19 @@ class Usync {
         }
     }
 
+    private setRootProperty() {
+        this.root.$current = this.currentDefferd
+        this.root.$prev = this.prevDefferd
+        this.root.$next = this.nextDefferd
+    }
+
     private done() {
 
         this.currentDefferd.__state__ = STATE.FULFILLED
+        this.currentDefferd.endTime = new Date().getTime()
+        this.setRootProperty()
+
+        this.runHookByName('taskEnd')
         this.index++
 
         // defferd running finished
@@ -133,7 +161,7 @@ class Usync {
             this.state = STATE.FULFILLED
             this.defferd = []
             this.index = -1
-            this.HOOK_END()
+            this.runHookByName('appEnd')
 
             // When a Usync instance set as a child task for another Usync instance
             // fulfilledBroadcast() will tell the parent it was fulfilled
@@ -156,52 +184,52 @@ class Usync {
         }
     }
 
-    catch(fn: IFunction) {
-        this.vessel.catch = fn;
-        return this;
-    }
+    // catch(fn: IFunction) {
+    //     this.vessel.catch = fn;
+    //     return this;
+    // }
 
     start() {
-        this.HOOK_START()
+        this.runHookByName('appStart')
         this.startTime = new Date().getTime()
         this.then()
     }
 
-    HOOK_START() {
-        this.lifecycleList.start.forEach(start => start.call(this, this.root))
+    runHookByName(hookName: string) {
+
+        let hook = new Function(`this.lifecycleList.${hookName}Quene.forEach(start => start.call(this, this.root))
+        if (this.proto.lifecycleList) {
+            var ${hookName}Quene = this.proto.lifecycleList.${hookName}Quene
+            ${hookName}Quene.forEach(start => start.call(this, this.root))
+        }`)
+
+        hook.call(this)
     }
 
-    HOOK_END() {
-        this.lifecycleList.end.forEach(end => end.call(this, this.root))
+    get proto() {
+        return Object.getPrototypeOf(this);
     }
 
-    private lifecycleList = (function () {
-        let list = <ILifecycleList>{}
-        for (let cycle of Object.keys(LIFE_CYCLE)) {
-            list[cycle] = []
+    extend(hooks: ILifeCycle) {
+        for (let key of Object.keys(this.lifecycleList)) {
+            let _key = key.replace('Quene', '')
+            if (hooks[_key]) {
+                this.lifecycleList[key].push(hooks[_key])
+            }
         }
-        return <ILifecycleList>list;
-    })();
+    }
+
+    private lifecycleList = initLifecycle();
 
     static createApp(state: IState) {
         return new Usync(state)
     }
 
-    static lifecycleList: ILifecycleList = (function () {
-        let list = <ILifecycleList>{}
-        for (let cycle of Object.keys(LIFE_CYCLE)) {
-            list[cycle] = []
-        }
-        return <ILifecycleList>list;
-    })();
-
-    lifecycle(hooks: ILifeCycle) {
-        for (let key of Object.keys(this.lifecycleList)) {
-            if (hooks[key]) {
-                this.lifecycleList[key].push(hooks[key])
-            }
-        }
+    static extend(hooks: ILifeCycle) {
+        Usync.prototype.lifecycleList = initLifecycle();
+        Usync.prototype.extend.call(Usync.prototype, hooks)
     }
+
 }
 
 export = Usync;

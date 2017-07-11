@@ -2,38 +2,24 @@ var Usync = require('../dist/Usync')
 
 var app = Usync.createApp('Plugin')
 
-app.lifecycle({
-    start(root) {
-        console.log(`Start ${root.$name}`)
-    },
-    end (root) {
-        console.log(`Finished ${root.$name}`)
-    }
-})
-
-var task1 = (root, next) => {
-    root.name = 'Usync'
-    console.log('Task 1')
+var task4 = (root, next) => {
     setTimeout(() => next(), 1000)
 }
 
-var task2 = (root, next) => {
-    root.desc = 'Serial task control'
-    console.log('Task 2')
+console.log(Object.prototype.toString.call(task4))
+
+var task5 = (root, next) => {
     setTimeout(() => next(), 1000)
 }
 
-var task3 = (root, next) => {
-    console.log('Task 3')
-    console.log(root)
-    console.log(app)
+var task6 = (root, next) => {
     next()
 }
 
 app.use([
-    task3,
-    task2,
-    task1,
+    task4,
+    task5,
+    task6,
 ])
 
 module.exports = app

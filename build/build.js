@@ -1,30 +1,46 @@
-module.exports = function (ob) {
-    console.log(ob)
-    return {
-        devtool: 'inline-source-map',
-        entry: ob.entry,
-        output: {
-            path: ob.outputPath,
-            filename: ob.outputFilenam,
-            library: ob.name,
-            libraryTarget: 'umd'
-        },
+var config = require('./config')
+var webpack = require('webpack')
+var ora = require('ora')
+var chalk = require('chalk')
+var webpackConf, env
+var figlet = require('figlet')
 
-        // Enable sourcemaps for debugging webpack's output.
-        devtool: "source-map",
 
-        resolve: {
-            // Add '.ts' and '.tsx' as resolvable extensions.
-            extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
-        },
-
-        module: {
-            rules: [
-                // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-                {test: /\.tsx?$/, loader: "ts-loader"}
-            ]
-        },
-
-        plugins: [].concat(ob.plugins || [])
-    };
+if (process.argv.indexOf(config.prod.argv) >= 0) {
+    env = 'prod'
+} else if (process.argv.indexOf(config.dev.argv) >= 0) {
+    env = 'dev'
+} else {
+    console.log('  ' + chalk.red('[Error]') + chalk.yellow(' Need to set env'))
+    process.exit(0)
 }
+webpackConf = require('./webpack.' + env + '.conf')
+
+var spinner = ora('Building for ' + env + '...')
+
+spinner.start()
+
+webpack(webpackConf, function (err, stats) {
+    spinner.stop()
+    if (err) throw err
+    process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }) + '\n\n')
+    console.log(chalk.cyan('  ' + config[env].output.filename + ' Build complete.\n'))
+    figlet('USYNC', {
+            horizontalLayout: 'fitted',
+        },
+        function(err, data) {
+            if (err) {
+                console.log('Something went wrong...');
+                console.dir(err);
+                return;
+            }
+            console.log(data)
+        });
+
+})

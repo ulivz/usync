@@ -3,22 +3,17 @@ var Usync = require('../dist/Usync')
 var app = Usync.createApp('Base')
 
 var task1 = (root, next) => {
-    root.name = 'Usync'
-    console.log('Task 1')
-    setTimeout(() => next(), 1000)
+    setTimeout(() => next(), 2000)
 }
 
 var task2 = (root, next) => {
-    root.desc = 'Serial task control'
-    console.log('Task 2')
-    setTimeout(() => next(), 1000)
+    setTimeout(() => next(), 300)
 }
 
 var task3 = (root, next) => {
-    console.log('Task 3')
-    next()
+    setTimeout(() => next(), 500)
 }
 
-app.use(task1).use(task2).use(task3)
+app.use([task1, task2, task3])
 
 module.exports = app
