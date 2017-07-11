@@ -1,18 +1,20 @@
 {
   "name": "usync",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A lightweight library used for clearer task control",
   "main": "dist/Usync.js",
   "scripts": {
     "dev": "node build/build.js -d",
     "build": "node build/build.js -p",
     "devtool": "devtool examples/index.js --watch",
-    "example": "node examples/index.js"
+    "example": "node examples/index.js",
+    "release": "node build/release.js"
   },
   "devDependencies": {
     "chalk": "^2.0.1",
     "figlet": "^1.2.0",
     "ora": "^1.3.0",
+    "shelljs": "^0.7.8",
     "ts-loader": "^2.2.2",
     "typescript": "^2.4.1",
     "webpack": "^3.1.0",

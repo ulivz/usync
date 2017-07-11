@@ -1,4 +1,4 @@
-import {IObject} from './interface'
+import {IObject} from '../interface/interface'
 
 export function assign(target: IObject, ...restOb: IObject[]): IObject {
 

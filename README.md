@@ -1,5 +1,3 @@
-<p aligh="center">Usync</div>
-
 <p aligh="center">
     <pre style="background-color: #fff;">
       _   _  ____ __   __ _   _   ____

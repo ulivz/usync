@@ -1,5 +1,6 @@
-import {assign} from './utils'
-import {IObject, IOptions, IBaseHandler, IFunction, ILifecycleMap, ILifeCycle} from './interface'
+import {assign} from '../utils/utils'
+import {initLifecycle} from './lifeCycle'
+import {IObject, IOptions, IBaseHandler, IFunction, ILifeCycle} from '../interface/interface'
 
 enum STATE {
     READY = 0,
@@ -8,28 +9,13 @@ enum STATE {
     REJECTED = 3
 }
 
-const LIFE_CYCLE = {
-    appStart: 1,
-    taskStart: 2,
-    taskEnd: 3,
-    appEnd: 4
-}
-
 type IHandler = Usync | IBaseHandler;
 type IState = string | IObject | IObject[];
 
-function initLifecycle() {
-    let list = <ILifecycleMap>{}
-    for (let cycle of Object.keys(LIFE_CYCLE)) {
-        list[cycle + 'Quene'] = []
-    }
-    return <ILifecycleMap>list;
-}
-
-class Usync {
+export default class Usync {
 
     private root: IObject;
-    // private vessel: IObject = {};
+    private vessel: IObject = {};
     private defferd: IHandler[];
     private index: number;
 
@@ -41,13 +27,12 @@ class Usync {
 
     // Wait to reset value
     private fulfilledBroadcast() {
-
     }
 
     constructor(state: IState, options?: IOptions) {
 
         this.root = Array.isArray(state) ? state :
-                typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
+            typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
                 typeof state === 'object' ? [state] : <IObject>{}
 
         options = assign({}, options)
@@ -93,7 +78,7 @@ class Usync {
             return;
         }
 
-        this.defferd.push(handler)
+        this.defferd.push(<IHandler>handler)
 
         if (this.defferd.length === 1) {
             this.state = STATE.PENDING
@@ -121,11 +106,11 @@ class Usync {
             this.runHookByName('taskStart')
 
             if (typeof this.currentDefferd === 'function') {
-                this.currentDefferd.apply(this, argues)
+                (<IFunction>this.currentDefferd).apply(this, argues)
 
             } else if (this.currentDefferd instanceof Usync) {
-                this.currentDefferd.fulfilledBroadcast = this.done.bind(this)
-                this.currentDefferd.start()
+                (<Usync>this.currentDefferd).fulfilledBroadcast = this.done.bind(this)
+                (<Usync>this.currentDefferd).start()
             }
 
         } catch (err) {
@@ -184,10 +169,10 @@ class Usync {
         }
     }
 
-    // catch(fn: IFunction) {
-    //     this.vessel.catch = fn;
-    //     return this;
-    // }
+    catch(fn: IFunction) {
+        this.vessel.catch = fn;
+        return this;
+    }
 
     start() {
         this.runHookByName('appStart')
@@ -231,6 +216,4 @@ class Usync {
     }
 
 }
-
-export = Usync;
 

@@ -5,36 +5,31 @@ var chalk = require('chalk')
 var webpackConf, env
 var figlet = require('figlet')
 
-
 if (process.argv.indexOf(config.prod.argv) >= 0) {
     env = 'prod'
+    webpackConf = require(conf(env))()
+    build(webpackConf)
+    build(require(conf('dev'))(), drawUSYNC)
+
 } else if (process.argv.indexOf(config.dev.argv) >= 0) {
     env = 'dev'
+    webpackConf = require(conf(env))({watch: true})
+    build(webpackConf)
+
 } else {
     console.log('  ' + chalk.red('[Error]') + chalk.yellow(' Need to set env'))
     process.exit(0)
 }
-webpackConf = require('./webpack.' + env + '.conf')
 
-var spinner = ora('Building for ' + env + '...')
+function conf(env) {
+    return './webpack.' + env + '.conf';
+}
 
-spinner.start()
-
-webpack(webpackConf, function (err, stats) {
-    spinner.stop()
-    if (err) throw err
-    process.stdout.write(stats.toString({
-            colors: true,
-            modules: false,
-            children: false,
-            chunks: false,
-            chunkModules: false
-        }) + '\n\n')
-    console.log(chalk.cyan('  ' + config[env].output.filename + ' Build complete.\n'))
+function drawUSYNC() {
     figlet('USYNC', {
             horizontalLayout: 'fitted',
         },
-        function(err, data) {
+        function (err, data) {
             if (err) {
                 console.log('Something went wrong...');
                 console.dir(err);
@@ -42,5 +37,24 @@ webpack(webpackConf, function (err, stats) {
             }
             console.log(data)
         });
+}
 
-})
+function build(webpackConf, callback) {
+
+    var spinner = ora('Building for ' + env + '...')
+    spinner.start()
+
+    webpack(webpackConf, function (err, stats) {
+        spinner.stop()
+        if (err) throw err
+        process.stdout.write(stats.toString({
+                colors: true,
+                modules: false,
+                children: false,
+                chunks: false,
+                chunkModules: false
+            }) + '\n\n')
+        console.log(chalk.cyan('  ' + config[env].output.filename + ' Build complete.\n'))
+        callback && callback()
+    })
+}

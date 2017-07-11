@@ -10,12 +10,13 @@ module.exports = {
             NODE_ENV: 'development'
         },
         argv: '-p',
-        entry: resolve('src/Usync.ts'),
+        entry: resolve('src/index.ts'),
         output: {
             path: resolve('dist'),
             filename: 'Usync.min.js',
             library: 'Usync',
-            libraryTarget: 'umd'
+            libraryTarget: 'umd',
+            umdNamedDefine: true
         },
     },
     dev: {
@@ -23,12 +24,13 @@ module.exports = {
             NODE_ENV: 'production'
         },
         argv: '-d',
-        entry: resolve('src/Usync.ts'),
+        entry: resolve('src/index.ts'),
         output: {
             path: resolve('dist'),
             filename: 'Usync.js',
             library: 'Usync',
-            libraryTarget: 'umd'
+            libraryTarget: 'umd',
+            umdNamedDefine: true
         },
     }
 }
