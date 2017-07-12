@@ -1,16 +1,15 @@
 var Usync = require('../dist/Usync')
+var app = Usync.app('Plugin')
 
-var app = Usync.createApp('Plugin')
-
-var task4 = (root, next) => {
+function task4(root, next) {
     setTimeout(() => next(), 1000)
 }
 
-var task5 = (root, next) => {
+function task5(root, next) {
     setTimeout(() => next(), 1000)
 }
 
-var task6 = (root, next) => {
+function task6(root, next) {
     next()
 }
 

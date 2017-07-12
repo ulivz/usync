@@ -2,8 +2,12 @@ var Usync = require('../dist/Usync')
 var fs = require('fs')
 var path = require('path')
 var examples = fs.readdirSync(__dirname)
+var chalk = require('chalk')
 
-console.log(Usync)
+function logWithTime(content) {
+    var time = new Date().toLocaleTimeString()
+    console.log(chalk.gray(time) + ' ' + content)
+}
 
 Usync.extend({
     // appStart(root) {
@@ -13,17 +17,17 @@ Usync.extend({
     //     console.log(`Finished ${root.$name}`)
     // },
     taskStart(root) {
-        console.time(root.$current.name)
-        // console.log(`Start ${root.$current.name}`)
+        // console.time(root.$current.name)
+        // logWithTime(` ${chalk.redBright('Starting')} ${chalk.cyan(root.$current.name)} ...`)
+        logWithTime(` Starting ${chalk.cyan(root.$current.name)} ...`)
     },
     taskEnd(root) {
-        console.timeEnd(root.$current.name)
-        // console.log(`Finished ${root.$current.name} after ${root.$current.endTime - root.$current.startTime}ms`)
+        // console.timeEnd(root.$current.name)
+        logWithTime(` ${chalk.redBright('Finished')} ${chalk.cyan(root.$current.name)} after ${chalk.magenta((root.$current.endTime - root.$current.startTime) + 'ms')}`)
     }
 })
 
-var app = Usync.createApp('Example')
-
+var app = Usync.app('Example')
 
 examples
     .sort()
@@ -31,6 +35,5 @@ examples
     .map(example => {
         app.use(require(path.resolve(__dirname, example)))
     })
-
 
 app.start()

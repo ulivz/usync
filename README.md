@@ -1,4 +1,4 @@
-<p aligh="center">
+<p align="center">
     <pre style="background-color: #fff;">
           _   _  ___  _   _  _ __    ___
          | | | |/ __|| | | || '_ \  / __|

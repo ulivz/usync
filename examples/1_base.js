@@ -1,19 +1,16 @@
 var Usync = require('../dist/Usync')
+var app = Usync.app('Base')
 
-var app = Usync.createApp('Base')
-
-var task1 = (root, next) => {
-    setTimeout(() => next(), 2000)
+function task1(root, next) {
+    setTimeout(() => next(), 500)
 }
 
-task.prototype.name = 'task1'
-
-var task2 = (root, next) => {
+function task2(root, next) {
     setTimeout(() => next(), 300)
 }
 
-var task3 = (root, next) => {
-    setTimeout(() => next(), 500)
+function task3(root, next) {
+    setTimeout(() => next(), 300)
 }
 
 app.use([
@@ -21,11 +18,5 @@ app.use([
     task2,
     task3
 ])
-
-app.nameMap({
-    task1,
-    task2,
-    task3
-})
 
 module.exports = app

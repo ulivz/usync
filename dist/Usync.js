@@ -102,6 +102,7 @@ var STATE;
     STATE[STATE["REJECTED"] = 3] = "REJECTED";
 })(STATE || (STATE = {}));
 var Usync = (function () {
+    // Wait to reset value
     function Usync(state, options) {
         this.vessel = {};
         this.lifecycleList = lifeCycle_1.default.init();
@@ -117,7 +118,6 @@ var Usync = (function () {
         this.index = -1;
         this.state = STATE.READY;
     }
-    // Wait to reset value
     Usync.prototype.fulfilledBroadcast = function () {
     };
     Object.defineProperty(Usync.prototype, "currentDefferd", {
@@ -153,12 +153,13 @@ var Usync = (function () {
         configurable: true
     });
     Usync.prototype.use = function (handler) {
+        // Supoort Array syntax
         if (Array.isArray(handler)) {
             for (var _i = 0, handler_1 = handler; _i < handler_1.length; _i++) {
                 var childHandler = handler_1[_i];
                 this.use(childHandler);
             }
-            return;
+            return this;
         }
         this.defferd.push(handler);
         if (this.defferd.length === 1) {
@@ -174,6 +175,7 @@ var Usync = (function () {
         return this;
     };
     Usync.prototype.then = function () {
+        var _this = this;
         // Add Support for time record
         this.currentDefferd.startTime = new Date().getTime();
         var argues = [this.root].concat(this.done.bind(this));
@@ -181,16 +183,24 @@ var Usync = (function () {
             this.setRootProperty();
             this.runHookByName('taskStart');
             if (typeof this.currentDefferd === 'function') {
-                this.currentDefferd.apply(this, argues);
+                var returnValue = this.currentDefferd.apply(this, argues);
+                if (returnValue instanceof Promise) {
+                    returnValue.then(function () {
+                        _this.done.call(_this);
+                    }).catch(function (err) {
+                        throw err;
+                    });
+                }
             }
             else if (this.currentDefferd instanceof Usync) {
-                this.currentDefferd.fulfilledBroadcast = this.done.bind(this)(this.currentDefferd).start();
+                this.currentDefferd.fulfilledBroadcast = this.done.bind(this);
+                this.currentDefferd.start();
             }
         }
         catch (err) {
-            if (this.catch) {
+            if (this.vessel.catch) {
                 var errArgues = [err].concat([this.root], this.done.bind(this));
-                this.catch.apply(this, errArgues);
+                this.vessel.catch.apply(this, errArgues);
             }
             else {
                 throw new Error(err);
@@ -259,7 +269,7 @@ var Usync = (function () {
             }
         }
     };
-    Usync.createApp = function (state) {
+    Usync.app = function (state) {
         return new Usync(state);
     };
     Usync.extend = function (hooks) {

@@ -9,8 +9,8 @@ enum STATE {
     REJECTED = 3
 }
 
-type IHandler = Usync | IBaseHandler;
 type IState = string | IObject | IObject[];
+type IHandler = Usync | IBaseHandler;
 
 export class Usync {
 
@@ -26,9 +26,6 @@ export class Usync {
     public __state__: number;
 
     // Wait to reset value
-    private fulfilledBroadcast() {
-    }
-
     constructor(state: IState, options?: IOptions) {
 
         this.root = Array.isArray(state) ? state :
@@ -46,6 +43,9 @@ export class Usync {
         this.defferd = []
         this.index = -1
         this.state = STATE.READY
+    }
+
+    private fulfilledBroadcast() {
     }
 
     get currentDefferd() {
@@ -71,11 +71,12 @@ export class Usync {
 
     public use(handler: IHandler | IHandler[]) {
 
+        // Supoort Array syntax
         if (Array.isArray(handler)) {
             for (let childHandler of handler) {
                 this.use(childHandler)
             }
-            return;
+            return this;
         }
 
         this.defferd.push(<IHandler>handler)
@@ -104,20 +105,27 @@ export class Usync {
 
             this.setRootProperty()
             this.runHookByName('taskStart')
-
             if (typeof this.currentDefferd === 'function') {
-                (<IFunction>this.currentDefferd).apply(this, argues)
+                let returnValue = this.currentDefferd.apply(this, argues)
+
+                if (returnValue instanceof Promise) {
+                    returnValue.then(() => {
+                        this.done.call(this)
+                    }).catch(err => {
+                        throw err
+                    })
+                }
 
             } else if (this.currentDefferd instanceof Usync) {
-                (<Usync>this.currentDefferd).fulfilledBroadcast = this.done.bind(this)
-                (<Usync>this.currentDefferd).start()
+                this.currentDefferd.fulfilledBroadcast = this.done.bind(this)
+                this.currentDefferd.start()
             }
 
         } catch (err) {
 
-            if (this.catch) {
+            if (this.vessel.catch) {
                 let errArgues = [err].concat([this.root], this.done.bind(this))
-                this.catch.apply(this, errArgues)
+                this.vessel.catch.apply(this, errArgues)
 
             } else {
                 throw new Error(err)
@@ -140,7 +148,6 @@ export class Usync {
 
         this.runHookByName('taskEnd')
         this.index++
-
         // defferd running finished
         if (this.index === this.defferd.length) {
             this.state = STATE.FULFILLED
@@ -206,7 +213,7 @@ export class Usync {
 
     private lifecycleList = lifeCycle.init();
 
-    static createApp(state: IState) {
+    static app(state: IState) {
         return new Usync(state)
     }
 
