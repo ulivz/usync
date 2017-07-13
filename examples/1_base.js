@@ -2,7 +2,7 @@ var Usync = require('../dist/Usync')
 var app = Usync.app('Base')
 
 function task1(root, next) {
-    setTimeout(() => next(), 500)
+    setTimeout(() => next(), 200)
 }
 
 function task2(root, next) {
@@ -10,7 +10,7 @@ function task2(root, next) {
 }
 
 function task3(root, next) {
-    setTimeout(() => next(), 300)
+    setTimeout(() => next(), 200)
 }
 
 app.use([
