@@ -37,6 +37,13 @@ if (!argv.disableVersionCheck) {
 var packageJSON = require('../package.json')
 packageJSON.version = argv.version
 fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(packageJSON, null, 2), 'utf-8')
+log('success', 'Update Package.json')
+
+var README_PATH = path.resolve(__dirname, '../README.md')
+var README = fs.readFileSync(README_PATH, 'utf-8')
+README = README.replace(/(Version\s)\d.\d.\d/, `$1${argv.version}`)
+fs.writeFileSync(README_PATH, README)
+log('success', 'Update README')
 
 // 2. Remove old file
 exec('rm -rf ' + config.prod.output.path)

@@ -1,6 +1,7 @@
-import {assign} from '../utils/utils'
+import {assign} from '../utils/index'
 import lifeCycle from './lifeCycle'
-import {IObject, IState, IOptions, IHandler, IFunction, ILifeCycle} from '../../types/Usync'
+import {IPlugin, IpluginOpts} from '../types/plugin'
+import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap} from '../types/baseType'
 
 enum STATE {
     READY = 0,
@@ -9,13 +10,12 @@ enum STATE {
     REJECTED = 3
 }
 
-export class Usync {
+export default class Usync {
 
-    private root: IObject;
-    private vessel: IObject = {};
-    private defferd: IHandler[];
-    private index: number;
-
+    public root: IObject;
+    public vessel: IObject = {};
+    public defferd: IHandler[];
+    public index: number;
     public state: number;
     public startTime: number;
     public endTime: number;
@@ -26,7 +26,7 @@ export class Usync {
     }
 
     // Wait to reset value
-    constructor(state: IState, options?: IOptions) {
+    constructor(state: IState, options?: IObject) {
 
         this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
@@ -92,7 +92,7 @@ export class Usync {
         return this
     }
 
-    private then() {
+    then() {
         // Add Support for time record
         this.currentDefferd.startTime = new Date().getTime()
 
@@ -131,13 +131,13 @@ export class Usync {
         }
     }
 
-    private setRootProperty() {
+    setRootProperty() {
         this.root.$current = this.currentDefferd
         this.root.$prev = this.prevDefferd
         this.root.$next = this.nextDefferd
     }
 
-    private done() {
+    done() {
 
         this.currentDefferd.__state__ = STATE.FULFILLED
         this.currentDefferd.endTime = new Date().getTime()
@@ -184,7 +184,7 @@ export class Usync {
         this.then()
     }
 
-    private runHookByName(hookName: string) {
+    runHookByName(hookName: string) {
 
         let hook = new Function(`this.lifecycleList.${hookName}Quene.forEach(start => start.call(this, this.root))
         if (this.proto.lifecycleList) {
@@ -208,16 +208,14 @@ export class Usync {
         }
     }
 
-    private lifecycleList = lifeCycle.init();
+    lifecycleList = <ILifecycleMap>lifeCycle.init();
 
-    static app(state: IState, options?: IOptions) {
+    static plugin(plugin: IPlugin, options?: IpluginOpts) {}
+
+    static app(state: IState, options?: IObject) {
         return new Usync(state, options)
     }
 
-    static extend(hooks: ILifeCycle) {
-        Usync.prototype.lifecycleList = lifeCycle.init();
-        Usync.prototype.extend.call(Usync.prototype, hooks)
-    }
-
+    static extend(hooks: ILifeCycle) {}
 }
 

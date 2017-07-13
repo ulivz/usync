@@ -2,30 +2,9 @@ var Usync = require('../dist/Usync')
 var fs = require('fs')
 var path = require('path')
 var examples = fs.readdirSync(__dirname)
-var chalk = require('chalk')
+var logger = require('../plugins/logger')
 
-function logWithTime(content) {
-    var time = new Date().toLocaleTimeString()
-    console.log(chalk.gray(time) + ' ' + content)
-}
-
-Usync.extend({
-
-    // Need to enhance
-    // appStart(root) {
-    //     console.log(`Start ${root.$name}`)
-    // },
-    // appEnd (root) {
-    //     console.log(`Finished ${root.$name}`)
-    // },
-
-    taskStart(root) {
-        logWithTime(` Starting ${chalk.cyan(root.$current.name)} ...`)
-    },
-    taskEnd(root) {
-        logWithTime(` ${chalk.redBright('Finished')} ${chalk.cyan(root.$current.name)} after ${chalk.magenta((root.$current.endTime - root.$current.startTime) + 'ms')}`)
-    }
-})
+Usync.plugin(logger)
 
 var app = Usync.app('Example')
 

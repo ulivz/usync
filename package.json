@@ -1,6 +1,6 @@
 {
   "name": "usync",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A lightweight library used for clearer task control",
   "main": "dist/Usync.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "help": "node build/help.js"
   },
   "unpkg": "dist/Usync.js",
-  "typings": "types/index.d.ts",
+  "typings": "types/src/core/index.ts",
   "devDependencies": {
     "chalk": "^2.0.1",
     "figlet": "^1.2.0",

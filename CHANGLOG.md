@@ -1,5 +1,9 @@
 # Changelog
 
+`0.0.9` / 2017-7-11
+
+- Add `typings` file
+
 `0.0.8` / 2017-7-11
 
 - Add support for native `Promise` and add a example
@@ -30,4 +34,3 @@
 - Support `(root, next)` syntax
 - Support `use(Usync-Instance)`
 - Add `next` reference in `root`
-

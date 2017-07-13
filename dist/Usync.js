@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -79,22 +79,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
-/// <reference path="./index.d.ts" />
-/// <reference path="../types/index.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var Usync_1 = __webpack_require__(1);
-module.exports = Usync_1.Usync;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = __webpack_require__(2);
-var lifeCycle_1 = __webpack_require__(3);
+var index_1 = __webpack_require__(3);
+var lifeCycle_1 = __webpack_require__(1);
 var STATE;
 (function (STATE) {
     STATE[STATE["READY"] = 0] = "READY";
@@ -110,7 +97,7 @@ var Usync = (function () {
         this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.setName(state)) && {}) :
                 typeof state === 'object' ? [state] : {};
-        options = utils_1.assign({}, options);
+        options = index_1.assign({}, options);
         if (options.name) {
             this.setName(options.name);
         }
@@ -270,20 +257,64 @@ var Usync = (function () {
             }
         }
     };
+    Usync.plugin = function (plugin, options) { };
     Usync.app = function (state, options) {
         return new Usync(state, options);
     };
-    Usync.extend = function (hooks) {
-        Usync.prototype.lifecycleList = lifeCycle_1.default.init();
-        Usync.prototype.extend.call(Usync.prototype, hooks);
-    };
+    Usync.extend = function (hooks) { };
     return Usync;
 }());
-exports.Usync = Usync;
+exports.default = Usync;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LIFE_CYCLE = {
+    appStart: 1,
+    taskStart: 2,
+    taskEnd: 3,
+    appEnd: 4
+};
+exports.default = {
+    init: function () {
+        var list = {};
+        for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
+            var cycle = _a[_i];
+            list[cycle + 'Quene'] = [];
+        }
+        return list;
+    }
+};
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/// <reference path="./index.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @license
+ * Copyright toxichl All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var core_1 = __webpack_require__(0);
+var globalAPI_1 = __webpack_require__(4);
+globalAPI_1.default(core_1.default);
+module.exports = core_1.default;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -315,28 +346,57 @@ exports.assign = assign;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var LIFE_CYCLE = {
-    appStart: 1,
-    taskStart: 2,
-    taskEnd: 3,
-    appEnd: 4
-};
-exports.default = {
-    init: function () {
-        var list = {};
-        for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
-            var cycle = _a[_i];
-            list[cycle + 'Quene'] = [];
+var plugin_1 = __webpack_require__(5);
+var extend_1 = __webpack_require__(6);
+function initGlobalAPI(_Usync) {
+    plugin_1.default(_Usync);
+    extend_1.default(_Usync);
+}
+exports.default = initGlobalAPI;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function initPlugin($Usync) {
+    $Usync.plugin = function (plugin, options) {
+        if (typeof plugin === 'function') {
+            plugin($Usync, options);
         }
-        return list;
-    }
-};
+        else if (typeof plugin === 'object' && plugin.install) {
+            plugin.install($Usync, options);
+        }
+    };
+}
+exports.default = initPlugin;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(0);
+var lifeCycle_1 = __webpack_require__(1);
+function initExtend($Usync) {
+    $Usync.extend = function (hooks) {
+        core_1.default.prototype.lifecycleList = lifeCycle_1.default.init();
+        core_1.default.prototype.extend.call(core_1.default.prototype, hooks);
+    };
+}
+exports.default = initExtend;
 
 
 /***/ })
