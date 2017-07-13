@@ -1,5 +1,8 @@
+import {Usync} from './index'
 
-// Random Object
+export type IState = string | IObject | IObject[];
+export type IHandler = Usync | IBaseHandler;
+
 export interface IObject {
     [propName: string]: any;
 }

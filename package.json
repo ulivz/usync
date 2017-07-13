@@ -10,6 +10,8 @@
     "example": "node examples/index.js",
     "help": "node build/help.js"
   },
+  "unpkg": "dist/Usync.js",
+  "typings": "types/index.d.ts",
   "devDependencies": {
     "chalk": "^2.0.1",
     "figlet": "^1.2.0",

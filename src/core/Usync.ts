@@ -1,6 +1,6 @@
 import {assign} from '../utils/utils'
 import lifeCycle from './lifeCycle'
-import {IObject, IOptions, IBaseHandler, IFunction, ILifeCycle} from '../interface/interface'
+import {IObject, IState, IOptions, IHandler, IFunction, ILifeCycle} from '../../types/Usync'
 
 enum STATE {
     READY = 0,
@@ -8,9 +8,6 @@ enum STATE {
     FULFILLED = 2,
     REJECTED = 3
 }
-
-type IState = string | IObject | IObject[];
-type IHandler = Usync | IBaseHandler;
 
 export class Usync {
 
@@ -24,6 +21,9 @@ export class Usync {
     public endTime: number;
     public __name__: string;
     public __state__: number;
+
+    public fulfilledBroadcast() {
+    }
 
     // Wait to reset value
     constructor(state: IState, options?: IOptions) {
@@ -43,9 +43,6 @@ export class Usync {
         this.defferd = []
         this.index = -1
         this.state = STATE.READY
-    }
-
-    private fulfilledBroadcast() {
     }
 
     get currentDefferd() {
@@ -176,18 +173,18 @@ export class Usync {
         }
     }
 
-    catch(fn: IFunction) {
+    public catch(fn: (err: any) => any) {
         this.vessel.catch = fn;
         return this;
     }
 
-    start() {
+    public start() {
         this.runHookByName('appStart')
         this.startTime = new Date().getTime()
         this.then()
     }
 
-    runHookByName(hookName: string) {
+    private runHookByName(hookName: string) {
 
         let hook = new Function(`this.lifecycleList.${hookName}Quene.forEach(start => start.call(this, this.root))
         if (this.proto.lifecycleList) {
@@ -202,7 +199,7 @@ export class Usync {
         return Object.getPrototypeOf(this);
     }
 
-    extend(hooks: ILifeCycle) {
+    public extend(hooks: ILifeCycle) {
         for (let key of Object.keys(this.lifecycleList)) {
             let _key = key.replace('Quene', '')
             if (hooks[_key]) {
@@ -213,8 +210,8 @@ export class Usync {
 
     private lifecycleList = lifeCycle.init();
 
-    static app(state: IState) {
-        return new Usync(state)
+    static app(state: IState, options?: IOptions) {
+        return new Usync(state, options)
     }
 
     static extend(hooks: ILifeCycle) {

@@ -79,8 +79,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./index.d.ts" />
+/// <reference path="../types/index.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 var Usync_1 = __webpack_require__(1);
 module.exports = Usync_1.Usync;
 
@@ -269,8 +270,8 @@ var Usync = (function () {
             }
         }
     };
-    Usync.app = function (state) {
-        return new Usync(state);
+    Usync.app = function (state, options) {
+        return new Usync(state, options);
     };
     Usync.extend = function (hooks) {
         Usync.prototype.lifecycleList = lifeCycle_1.default.init();

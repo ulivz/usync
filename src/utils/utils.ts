@@ -1,4 +1,4 @@
-import {IObject} from '../interface/interface'
+import {IObject} from '../../types/Usync'
 
 export function assign(target: IObject, ...restOb: IObject[]): IObject {
 

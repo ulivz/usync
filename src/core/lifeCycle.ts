@@ -1,4 +1,4 @@
-import {ILifecycleMap} from '../interface/interface'
+import {ILifecycleMap} from '../../types/Usync'
 
 const LIFE_CYCLE = {
     appStart: 1,
