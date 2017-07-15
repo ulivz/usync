@@ -1,13 +1,22 @@
 # Changelog
 
+`0.0.10` / 2017-7-13
+
+- Add `beforeUse` lifeCycle
+- Add `init` lifeCycle
+- rewrite `looger` plugin, and seperated the indent logic from core to plugin
+- Rewrite README and add Chinese README
+
 `0.0.9` / 2017-7-11
 
-- Add `typings` file
+- Add `Usync.plugin()` API
+- Add `Usync.extend()` API
+- Add a example for `Async/Await`
 
 `0.0.8` / 2017-7-11
 
 - Add support for native `Promise` and add a example
-- Enhance `rrror catch`
+- Enhance `error catch`
 
 `0.0.7` / 2017-7-11
 
