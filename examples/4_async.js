@@ -11,15 +11,15 @@ function sleep(duration) {
     })
 }
 
-async function task9() {
+async function task7() {
     await sleep(100)
 }
 
-async function task10() {
+async function task8() {
     await sleep(100)
 }
 
- app.use([task9, task10])
+app.use([task7, task8])
     .catch(err => {
         console.log(err)
     })

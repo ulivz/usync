@@ -1,19 +1,19 @@
 var Usync = require('../dist/Usync')
 var app = Usync.app('Promise')
 
-function task7() {
+function task4() {
     return new Promise(resolve => {
         setTimeout(() => resolve(), 300)
     })
 }
 
-function task8() {
+function task5() {
     return new Promise(resolve => {
         setTimeout(() => resolve(), 200)
     })
 }
 
- app.use([task7, task8])
+ app.use([task4, task5])
     .catch(err => {
         console.log(err)
     })
