@@ -9,102 +9,105 @@
     </pre>
 </div>
 
+# 核心
 
-## 快速上手
+`Usync`的核心是始终如一的串行执行（Uniform Synchronous），可以在浏览器或者Node环境中运行。
 
-
-## Usages
-
-Here are three tasks that may contain asynchronous code
+此外，它支持任务的切分和任务树的设计。并默认加入了任务状态。由于`Usync`仅仅并支持提供了一些生命周期的钩子函数和拓展方法，让你能够轻松地拓展`Usync`。
 
 ```js
-function task1() {}
-function task2() {}
-function task3() {}
+app.use([task1,task2,task3 ... ]).start()
 ```
 
-If the three tasks share one or more global state, and needs to be strictly executed serially, This time, you will need Usync:
+# 快速上手
+
 
 ```js
-// Intialize state, state can be a object or an array
-// The state will be passed into every task's controller as arguments 
-var app = Usync.app(state)
+// 创建一个 name 为 'Work' 的任务
+var app = Usync.app('Work')
 
-// Define task execution order
-app.use(task1)
-   .use(task2)
-   .use(task3)
-    
-// Run app 
-app.start()  
-```
-
-At this point, you can write task controller like this (`next` style likes `generator` ?):
-
-```js
-function task1(state, next) {
-    // ... Async or Sync Code
-    
-    // Call next() to execute the next task
-    next()
+// 定义三个子任务
+function task1(root, next) {
+    // root: Work 任务生命周期内不断向下传递的对象
+    // next: 调用下一个任务
+    setTimeout(() => next(), 200)
 }
+
+function task2(root, next) {
+    setTimeout(() => next(), 300)
+}
+
+function task3(root, next) {
+    setTimeout(() => next(), 200)
+}
+
+// 定义任务队列
+app.use([task1,task2,task3])
+
+// 运行任务
+app.start()
 ```
 
-Then task will be strictly executed in accordance with the order you `use()`
+# 特性
 
-What are the benefits? In the life cycle of the whole task, you don't need to define any variables, just hand it to the `state`. So, you can hide the details of each task (separate tasks to files), and only need to focus on the holistic task process.
+1. 子任务类型支持：Function / Usync / Promise / Async Function
+2. 提供生命周期钩子（Lifecycle Hook）和插件（Plugin）机制，方便拓展
+3. 默认支持任务生命周期内有效的根状态（Root State）
 
-## API
+# API
+# `Usync.app([state])`
+- `state` Array | Object | String
+- `return value` 一个Usync的app实例
 
-# `Usync.app(state)`
-- `state` Array | Object | String | undefined
-- `return value` a intance of Usync
+需要注意的是，state参数是可选的，当app的整个生命周期需要依赖一定的初始化状态时，我们可以通过state注入，举例来说：
 
 ```js
-var app = Usync.app()
+let root = {
+    // 初始化根状态
+} 
+let app = Usync.app(root)
 ```
 
-If `state` is empty, so will generate an empty `state` object by default. the `state` will shuttle throughout the whole life cycle.
+接下来，我们可以在app生命周期中的每一个任务中使用了：
 
+```js
+app.use(function task1(root) {
+    fx(root) //对root进行一些操作 
+});
+```
 
-# `app.use(taskHandler)`
-- `taskHandler` Function | Usync Instance
+> 注意：当state参数未设定时，usync会默认生成一个root空对象。
+
+# `Usync.prototype.use(task)`
+- `task` Function | Usync | Promise | Async Function | Array
 - `return value` this
 
-if the task handler is a function, the parameters of the function as follows:
-
-    state1 , state2, ... , next
-
-The number of state parameters depends on the number of object passed in at initialization.
-
-If you initialize as follows:
-
-    var app = Usync.app(A)
-    
-then You can write your task handler like this:
+该方法用于向Usync App中添加子任务。`use()`方法支持链式调用，也支持一个数组的传入。
 
 ```js
-function task(A , next) {
-    // Do something
-    
-    next()  
-}
-
-app.use(task)
+app.use(task1).use(task2).use(task3)
+// 等价于
+app.use([task1, task2, task3])
 ```
 
-And if you write this:
+上述示例的执行顺序为: `task1 => task2 => task3`。
 
-    var app = Usync.app(A, B, C)
-    
-You can use:
+use方法的使用示例可以参见以下示例：
 
-```js
-function task(A, B, C, next) {
-    // Do something
-    
-    next()  
-}
+类型|示例
+---|---
+Function | [Demo](examples/1_function.js)
+Promise | [Demo](examples/2_promise.js)
+Async/Await| [Demo](examples/3_async.js)
+Usync | [Demo](examples/4_task_tree.js)
 
-app.use(task)
+> 注意：当task需要为一个具名函数。和 [orchestrator](https://github.com/robrich/orchestrator) 以及依赖其的 [gulp](https://github.com/gulpjs/gulp) 的设计理念(`taskName`+`taskHandler`)不一样，Usync只需要一个`taskHandler`，Usync将会把该`taskHandler`的name作为该task的name。
+
+可以clone本项目运行example来查看默认的exmaple的运行结果：
+
 ```
+git clone https://github.com/toxichl/usync.git
+npm i && npm run example
+```
+
+<img src="./static/example.gif"/>
