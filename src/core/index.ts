@@ -1,7 +1,7 @@
 import {assign} from '../utils/index'
-import lifeCycle from './lifeCycle'
+import {init as initlifeCycle, LIFECYCLE as LIFE} from './lifeCycle'
 import {IPlugin, IpluginOpts} from '../types/plugin'
-import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap} from '../types/baseType'
+import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap, IHookArgs, IFunction} from '../types/baseType'
 
 enum STATE {
     READY = 0,
@@ -21,6 +21,8 @@ export default class Usync {
     public endTime: number;
     public __name__: string;
     public __state__: number;
+    public depth: number;
+    public $parent: Usync;
 
     public fulfilledBroadcast() {
     }
@@ -29,7 +31,7 @@ export default class Usync {
     constructor(state: IState, options?: IObject) {
 
         this.root = Array.isArray(state) ? state :
-            typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
+                typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
                 typeof state === 'object' ? [state] : <IObject>{}
 
         options = assign({}, options)
@@ -43,6 +45,7 @@ export default class Usync {
         this.defferd = []
         this.index = -1
         this.state = STATE.READY
+        this.runHook(LIFE[LIFE.init], this)
     }
 
     get currentDefferd() {
@@ -76,6 +79,9 @@ export default class Usync {
             return this;
         }
 
+        handler.$parent = this
+        this.runHook(LIFE[LIFE.beforeUse], this, handler)
+
         this.defferd.push(<IHandler>handler)
 
         if (this.defferd.length === 1) {
@@ -101,7 +107,7 @@ export default class Usync {
         try {
 
             this.setRootProperty()
-            this.runHookByName('taskStart')
+            this.runHook(LIFE[LIFE.taskStart], this.root)
             if (typeof this.currentDefferd === 'function') {
                 let returnValue = this.currentDefferd.apply(this, argues)
 
@@ -143,14 +149,14 @@ export default class Usync {
         this.currentDefferd.endTime = new Date().getTime()
         this.setRootProperty()
 
-        this.runHookByName('taskEnd')
+        this.runHook(LIFE[LIFE.taskEnd], this.root)
         this.index++
         // defferd running finished
         if (this.index === this.defferd.length) {
             this.state = STATE.FULFILLED
             this.defferd = []
             this.index = -1
-            this.runHookByName('appEnd')
+            this.runHook(LIFE[LIFE.appEnd], this.root)
 
             // When a Usync instance set as a child task for another Usync instance
             // fulfilledBroadcast() will tell the parent it was fulfilled
@@ -179,43 +185,43 @@ export default class Usync {
     }
 
     public start() {
-        this.runHookByName('appStart')
+        this.runHook(LIFE[LIFE.appStart], this.root)
         this.startTime = new Date().getTime()
         this.then()
     }
 
-    runHookByName(hookName: string) {
+    runHook(name: string, ...args: IHookArgs) {
+        let hookQuene = `${name}Quene`
+        this.lifecycleMap[hookQuene].forEach(hook => hook.apply(this, args))
 
-        let hook = new Function(`this.lifecycleList.${hookName}Quene.forEach(start => start.call(this, this.root))
-        if (this.proto.lifecycleList) {
-            var ${hookName}Quene = this.proto.lifecycleList.${hookName}Quene
-            ${hookName}Quene.forEach(start => start.call(this, this.root))
-        }`)
-
-        hook.call(this)
+        if (this.protoLifecycleMap) {
+            this.protoLifecycleMap[hookQuene].forEach(hook => hook.apply(this, args))
+        }
     }
 
-    get proto() {
-        return Object.getPrototypeOf(this);
+    get protoLifecycleMap() {
+        return <ILifecycleMap>Object.getPrototypeOf(this).lifecycleMap;
     }
 
     public extend(hooks: ILifeCycle) {
-        for (let key of Object.keys(this.lifecycleList)) {
+        for (let key of Object.keys(this.lifecycleMap)) {
             let _key = key.replace('Quene', '')
             if (hooks[_key]) {
-                this.lifecycleList[key].push(hooks[_key])
+                this.lifecycleMap[key].push(hooks[_key])
             }
         }
     }
 
-    lifecycleList = <ILifecycleMap>lifeCycle.init();
+    lifecycleMap = <ILifecycleMap>initlifeCycle();
 
-    static plugin(plugin: IPlugin, options?: IpluginOpts) {}
+    static plugin(plugin: IPlugin, options?: IpluginOpts) {
+    }
 
     static app(state: IState, options?: IObject) {
         return new Usync(state, options)
     }
 
-    static extend(hooks: ILifeCycle) {}
+    static extend(hooks: ILifeCycle) {
+    }
 }
 

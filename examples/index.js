@@ -4,9 +4,13 @@ var path = require('path')
 var examples = fs.readdirSync(__dirname)
 var logger = require('../plugins/logger')
 
-Usync.plugin(logger)
+Usync.plugin(logger, {
+    time: true,
+    indent: true
+})
 
-var app = Usync.app('Example')
+
+var app = Usync.app('Example');
 
 examples
     .sort()

@@ -9,6 +9,7 @@ export interface IObject {
 
 export interface IFunction {
     (param: any): any;
+    [key: string]: any;
 }
 
 export interface IBaseHandler extends IFunction {
@@ -16,6 +17,7 @@ export interface IBaseHandler extends IFunction {
     duration: number;
     startTime?: number;
     endTime?: number;
+    $parent: Usync;
 }
 
 export interface ILifecycleMap {
@@ -26,3 +28,4 @@ export interface ILifeCycle {
     [key: string]: IFunction;
 }
 
+export type IHookArgs = any[];

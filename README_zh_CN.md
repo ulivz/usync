@@ -76,6 +76,15 @@ app.use(function task1(root) {
 });
 ```
 
+除此之外，Usync还初始化了一些值：
+
+属性|说明
+---|---
+app.$current | 当前的task
+root.$prev | 上一个task
+root.$next | 下一个task
+
+
 > 注意：当state参数未设定时，usync会默认生成一个root空对象。
 
 # `Usync.prototype.use(task)`
@@ -111,3 +120,26 @@ npm i && npm run example
 ```
 
 <img src="./static/example.gif"/>
+
+# lifeCycle / Usync.extend
+
+Usync目前提供的生命周期的钩子函数如下：
+
+钩子 | 参数 |描述
+---|---|---
+init | (UsyncApp) | 在一个UsyncApp创建结束之前
+beforeUse | (UsyncApp, task) | 在一个 task 即将被一个 UsyncApp use 之前
+appStart | (root) | 一个`Usync app`开始之前 
+appEnd| (root) | 一个`Usync app`结束之前 
+taskStart | (root) | 一个`task`开始之前 
+taskEnd | (root) | 一个`task`结束之前 
+
+其中，root上可用的属性如下：
+
+属性|说明
+---|---
+root.$current | 当前的task
+root.$prev | 上一个task
+root.$next | 下一个task
+
+

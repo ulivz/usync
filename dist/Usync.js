@@ -93,7 +93,7 @@ var Usync = (function () {
     // Wait to reset value
     function Usync(state, options) {
         this.vessel = {};
-        this.lifecycleList = lifeCycle_1.default.init();
+        this.lifecycleMap = lifeCycle_1.init();
         this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.setName(state)) && {}) :
                 typeof state === 'object' ? [state] : {};
@@ -105,6 +105,7 @@ var Usync = (function () {
         this.defferd = [];
         this.index = -1;
         this.state = STATE.READY;
+        this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.init], this);
     }
     Usync.prototype.fulfilledBroadcast = function () {
     };
@@ -149,6 +150,8 @@ var Usync = (function () {
             }
             return this;
         }
+        handler.$parent = this;
+        this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.beforeUse], this, handler);
         this.defferd.push(handler);
         if (this.defferd.length === 1) {
             this.state = STATE.PENDING;
@@ -169,7 +172,7 @@ var Usync = (function () {
         var argues = [this.root].concat(this.done.bind(this));
         try {
             this.setRootProperty();
-            this.runHookByName('taskStart');
+            this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.taskStart], this.root);
             if (typeof this.currentDefferd === 'function') {
                 var returnValue = this.currentDefferd.apply(this, argues);
                 if (returnValue instanceof Promise) {
@@ -204,14 +207,14 @@ var Usync = (function () {
         this.currentDefferd.__state__ = STATE.FULFILLED;
         this.currentDefferd.endTime = new Date().getTime();
         this.setRootProperty();
-        this.runHookByName('taskEnd');
+        this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.taskEnd], this.root);
         this.index++;
         // defferd running finished
         if (this.index === this.defferd.length) {
             this.state = STATE.FULFILLED;
             this.defferd = [];
             this.index = -1;
-            this.runHookByName('appEnd');
+            this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.appEnd], this.root);
             // When a Usync instance set as a child task for another Usync instance
             // fulfilledBroadcast() will tell the parent it was fulfilled
             if (typeof this.fulfilledBroadcast === 'function') {
@@ -233,35 +236,45 @@ var Usync = (function () {
         return this;
     };
     Usync.prototype.start = function () {
-        this.runHookByName('appStart');
+        this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.appStart], this.root);
         this.startTime = new Date().getTime();
         this.then();
     };
-    Usync.prototype.runHookByName = function (hookName) {
-        var hook = new Function("this.lifecycleList." + hookName + "Quene.forEach(start => start.call(this, this.root))\n        if (this.proto.lifecycleList) {\n            var " + hookName + "Quene = this.proto.lifecycleList." + hookName + "Quene\n            " + hookName + "Quene.forEach(start => start.call(this, this.root))\n        }");
-        hook.call(this);
+    Usync.prototype.runHook = function (name) {
+        var _this = this;
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var hookQuene = name + "Quene";
+        this.lifecycleMap[hookQuene].forEach(function (hook) { return hook.apply(_this, args); });
+        if (this.protoLifecycleMap) {
+            this.protoLifecycleMap[hookQuene].forEach(function (hook) { return hook.apply(_this, args); });
+        }
     };
-    Object.defineProperty(Usync.prototype, "proto", {
+    Object.defineProperty(Usync.prototype, "protoLifecycleMap", {
         get: function () {
-            return Object.getPrototypeOf(this);
+            return Object.getPrototypeOf(this).lifecycleMap;
         },
         enumerable: true,
         configurable: true
     });
     Usync.prototype.extend = function (hooks) {
-        for (var _i = 0, _a = Object.keys(this.lifecycleList); _i < _a.length; _i++) {
+        for (var _i = 0, _a = Object.keys(this.lifecycleMap); _i < _a.length; _i++) {
             var key = _a[_i];
             var _key = key.replace('Quene', '');
             if (hooks[_key]) {
-                this.lifecycleList[key].push(hooks[_key]);
+                this.lifecycleMap[key].push(hooks[_key]);
             }
         }
     };
-    Usync.plugin = function (plugin, options) { };
+    Usync.plugin = function (plugin, options) {
+    };
     Usync.app = function (state, options) {
         return new Usync(state, options);
     };
-    Usync.extend = function (hooks) { };
+    Usync.extend = function (hooks) {
+    };
     return Usync;
 }());
 exports.default = Usync;
@@ -274,22 +287,41 @@ exports.default = Usync;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var LIFE_CYCLE = {
-    appStart: 1,
-    taskStart: 2,
-    taskEnd: 3,
-    appEnd: 4
-};
-exports.default = {
-    init: function () {
-        var list = {};
-        for (var _i = 0, _a = Object.keys(LIFE_CYCLE); _i < _a.length; _i++) {
-            var cycle = _a[_i];
-            list[cycle + 'Quene'] = [];
+var LIFECYCLE;
+(function (LIFECYCLE) {
+    LIFECYCLE[LIFECYCLE["appStart"] = 1] = "appStart";
+    LIFECYCLE[LIFECYCLE["taskStart"] = 2] = "taskStart";
+    LIFECYCLE[LIFECYCLE["taskEnd"] = 3] = "taskEnd";
+    LIFECYCLE[LIFECYCLE["appEnd"] = 4] = "appEnd";
+    LIFECYCLE[LIFECYCLE["beforeUse"] = 5] = "beforeUse";
+    LIFECYCLE[LIFECYCLE["init"] = 6] = "init";
+})(LIFECYCLE = exports.LIFECYCLE || (exports.LIFECYCLE = {}));
+/**
+ * Check if a string only contains Number string
+ * @param value
+ * @returns {boolean}
+ */
+function isNumberStr(value) {
+    // Cannot to use the parseInt API
+    // because parseInt will ignore the partial that aren't Number
+    var n = Number(value);
+    return !isNaN(n);
+}
+/**
+ * Init the life cycle map
+ * @returns {ILifecycleMap}
+ */
+function init() {
+    var list = {};
+    for (var _i = 0, _a = Object.keys(LIFECYCLE); _i < _a.length; _i++) {
+        var cycle = _a[_i];
+        if (!isNumberStr(cycle)) {
+            list[cycle + "Quene"] = [];
         }
-        return list;
     }
-};
+    return list;
+}
+exports.init = init;
 
 
 /***/ }),
@@ -392,7 +424,9 @@ var core_1 = __webpack_require__(0);
 var lifeCycle_1 = __webpack_require__(1);
 function initExtend($Usync) {
     $Usync.extend = function (hooks) {
-        core_1.default.prototype.lifecycleList = lifeCycle_1.default.init();
+        if (!core_1.default.prototype.lifecycleMap) {
+            core_1.default.prototype.lifecycleMap = lifeCycle_1.init();
+        }
         core_1.default.prototype.extend.call(core_1.default.prototype, hooks);
     };
 }
