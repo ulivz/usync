@@ -10,20 +10,20 @@
 </div>
 
 
-
+<br/>
 
 # 核心
 
 `Usync`的核心是始终如一的串行执行（Uniform Synchronous），可以在浏览器或者Node环境中运行。
 
-此外，它支持任务的切分和任务树的设计。并默认加入了任务状态。由于`Usync`仅仅并支持提供了一些生命周期的钩子函数和拓展方法，让你能够轻松地拓展`Usync`。
+此外，它支持任务的切分和任务树的设计。并默认加入了任务状态。由于`Usync`非常轻量，核心API很少，所以`Usync`提供了一组生命周期的钩子函数和拓展方法，让你能够轻松地拓展`Usync`。
 
 ```js
 app.use([task1,task2,task3 ... ]).start()
 ```
 
 
-
+<br/>
 
 # 快速上手
 
@@ -33,7 +33,7 @@ var app = Usync.app('Work')
 
 // 定义三个子任务
 function task1(root, next) {
-    // root: Work 任务生命周期内不断向下传递的对象
+    // root: Work 任务生命周期内不断向下传递的对根状态对象
     // next: 调用下一个任务
     setTimeout(() => next(), 200)
 }
@@ -53,7 +53,7 @@ app.use([task1,task2,task3])
 app.start()
 ```
 
-
+<br/>
 
 # 特性
 
