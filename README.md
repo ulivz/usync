@@ -1,15 +1,10 @@
 <p align="center">
-    <pre style="background-color: #fff;">
-     _   _  ___  _   _  _ __    ___
-    | | | |/ __|| | | || '_ \  / __|
-    | |_| |\__ \| |_| || | | || (__
-     \__,_||___/ \__, ||_| |_| \___|
-                 |___/
-             Version 0.0.13
-    </pre>
+    <img src="static/logo.svg" width="" height="" style=""/>
 </div>
 
 
+
+im
 <br/>
 
 # usync
