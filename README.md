@@ -6,6 +6,9 @@
 
 <br/>
 
+[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
+[![Build status](https://img.shields.io/travis/toxichl/usync.svg?style=flat)](https://npmjs.com/package/usync)  
+
 # usync
 
 The core of `Usync` is uniform serial execution, which can be run in browser or Node.js enviroment.
@@ -215,13 +218,6 @@ Same to the `Usync.extend()`, the difference of them is that the `Usync.extend()
 `Usync` uses a plug-in API design that is consistent with `Vue`, and the `Usync` plug-in should have an open method, `install`. The first parameter of this method is the constructor of the `Usync`, and the second parameter is the optional option object.
 
 You can refer to the implementation of [logger](plugins/logger.js)  to learn how to combine a lifecycle hook and plugin API to write a plug-in for `Usync`.
-
-
-<br/>
-
-## Badges
-
-[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
 
 
 <br/>

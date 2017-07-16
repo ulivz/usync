@@ -6,6 +6,10 @@
 
 <br/>
 
+[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
+[![Build status](https://img.shields.io/travis/toxichl/usync.svg?style=flat)](https://npmjs.com/package/usync)  
+
+
 
 # 核心
 
@@ -218,12 +222,6 @@ Usync.extend({
 
 可以参照 [logger](plugins/logger.js) 的实现来学习如何结合生命周期的钩子和plugin API来为`Usync`书写一个插件。
 
-
-<br/>
-
-## Badges
-
-[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
 
 
 <br/>
