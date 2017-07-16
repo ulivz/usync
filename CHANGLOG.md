@@ -1,5 +1,9 @@
 # Changelog
 
+`0.0.14` / 2017-7-16
+
+- Add logo
+
 `0.0.13` / 2017-7-16
 
 - Fix a build bug

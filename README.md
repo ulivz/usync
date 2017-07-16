@@ -1,6 +1,9 @@
 <p align="center">
+  <a href="http://gulpjs.com">
     <img src="./static/logo.png" width="300" height="" style=""/>
-</div>
+  </a>
+  <p align="center">Version 0.0.14</p>
+</p>
 
 <br/>
 
@@ -227,4 +230,3 @@ You can refer to the implementation of [logger](plugins/logger.js)  to learn how
 ## Author
 
 **usync** © [toxichl](https://github.com/toxichl/usync), Released under the [MIT](LICENSE) License.<br>
-Authored and maintained by toxichl with help from contributors [ [list](https://github.com/toxichl/usync/contributors) ].
