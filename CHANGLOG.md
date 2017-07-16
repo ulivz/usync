@@ -1,5 +1,10 @@
 # Changelog
 
+`0.0.11` / 2017-7-16
+
+- Change the summary
+- Refactor the code style
+
 `0.0.10` / 2017-7-13
 
 - Add `beforeUse` lifeCycle

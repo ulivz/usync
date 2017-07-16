@@ -337,7 +337,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Copyright toxichl All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://github.com/toxichl/usync/blob/master/LICENSE
  */
 var core_1 = __webpack_require__(0);
 var globalAPI_1 = __webpack_require__(4);

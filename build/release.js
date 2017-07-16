@@ -40,9 +40,13 @@ fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(pack
 log('success', 'Update Package.json')
 
 var README_PATH = path.resolve(__dirname, '../README.md')
+var README_CN_PATH = path.resolve(__dirname, '../README_zh_CN.md')
 var README = fs.readFileSync(README_PATH, 'utf-8')
+var README_CN = fs.readFileSync(README_CN_PATH, 'utf-8')
 README = README.replace(/(Version\s)\d.\d.\d/, `$1${argv.version}`)
+README_CN = README_CN.replace(/(Version\s)\d.\d.\d/, `$1${argv.version}`)
 fs.writeFileSync(README_PATH, README)
+fs.writeFileSync(README_CN_PATH, README_CN)
 log('success', 'Update README')
 
 // 2. Remove old file

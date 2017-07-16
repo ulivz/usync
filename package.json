@@ -1,7 +1,7 @@
 {
   "name": "usync",
-  "version": "0.0.10",
-  "description": "A lightweight library used for clearer task control",
+  "version": "0.0.11",
+  "description": "A lightweight library used for serial task control",
   "main": "dist/Usync.js",
   "scripts": {
     "dev": "node build/build.js -d",

@@ -5,7 +5,7 @@
  * Copyright toxichl All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://github.com/toxichl/usync/blob/master/LICENSE
  */
 
 import Usync from './core';

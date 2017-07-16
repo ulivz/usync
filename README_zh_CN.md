@@ -1,11 +1,11 @@
 <p align="center">
     <pre style="background-color: #fff;">
-          _   _  ___  _   _  _ __    ___
-         | | | |/ __|| | | || '_ \  / __|
-         | |_| |\__ \| |_| || | | || (__
-          \__,_||___/ \__, ||_| |_| \___|
-                      |___/
-                  Version 0.0.9
+     _   _  ___  _   _  _ __    ___
+    | | | |/ __|| | | || '_ \  / __|
+    | |_| |\__ \| |_| || | | || (__
+     \__,_||___/ \__, ||_| |_| \___|
+                 |___/
+             Version 0.0.110
     </pre>
 </div>
 
@@ -83,7 +83,7 @@ app.start()
 
 <br/>
 
-# `Usync.app([state])`
+## `Usync.app([state])`
 - `state` Array | Object | String
 - `return value` 一个Usync的app实例
 
@@ -118,7 +118,7 @@ app.use(function task1(root) {
 
 <br/>
 
-# `Usync.prototype.use(task)`
+## `Usync.prototype.use(task)`
 - `task` Function | Usync | Promise | Async Function | Array
 - `return value` this
 
@@ -182,7 +182,7 @@ Usync目前提供的生命周期的钩子函数如下：
 
 <br/>
 
-# `Usync.extend(object)`
+## `Usync.extend(object)`
 - `object` 一个或多个生命周期钩子处理函数组成的对象
 - `return value` 无
 
@@ -204,7 +204,7 @@ Usync.extend({
 
 <br/>
 
-# `Usync.prototype.extend(object)`
+## `Usync.prototype.extend(object)`
 - `object` 一个或生命周期钩子处理函数组成的对象
 - `return value` 无
 
@@ -213,7 +213,7 @@ Usync.extend({
 
 <br/>
 
-# `Usync.plugin(plugin)`
+## `Usync.plugin(plugin)`
 - `plugin` Object | Function
 - `return value` 无
 

@@ -4,7 +4,6 @@ import Usync from '../core'
 export default function initPlugin($Usync: typeof Usync) {
 
     $Usync.plugin = function (plugin: IPlugin, options?: IpluginOpts) {
-
         if (typeof plugin === 'function') {
             plugin($Usync, options)
 

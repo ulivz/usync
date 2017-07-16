@@ -1,7 +1,7 @@
 import {assign} from '../utils/index'
 import {init as initlifeCycle, LIFECYCLE as LIFE} from './lifeCycle'
 import {IPlugin, IpluginOpts} from '../types/plugin'
-import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap, IHookArgs, IFunction} from '../types/baseType'
+import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap, IHookArgs} from '../types/baseType'
 
 enum STATE {
     READY = 0,

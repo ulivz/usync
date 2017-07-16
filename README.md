@@ -1,11 +1,11 @@
 <p align="center">
     <pre style="background-color: #fff;">
-          _   _  ___  _   _  _ __    ___
-         | | | |/ __|| | | || '_ \  / __|
-         | |_| |\__ \| |_| || | | || (__
-          \__,_||___/ \__, ||_| |_| \___|
-                      |___/
-                  Version 0.0.10
+     _   _  ___  _   _  _ __    ___
+    | | | |/ __|| | | || '_ \  / __|
+    | |_| |\__ \| |_| || | | || (__
+     \__,_||___/ \__, ||_| |_| \___|
+                 |___/
+             Version 0.0.110
     </pre>
 </div>
 
@@ -83,7 +83,7 @@ app.start()
 
 <br/>
 
-# `Usync.app([state])`
+## `Usync.app([state])`
 - `state` Array | Object | String
 - `return value` A Usync app instance
 
@@ -117,7 +117,7 @@ attribute | description
 
 <br/>
 
-# `Usync.prototype.use(task)`
+## `Usync.prototype.use(task)`
 - `task` Function | Usync | Promise | Async Function | Array
 - `return value` this
 
@@ -156,7 +156,7 @@ npm i && npm run example
 
 <br/>
 
-## Life cycle
+## Life Cycle
 
 The hook function of the life cycle provided by Usync is as follows:
 
@@ -181,7 +181,7 @@ About how to use these hooks, need the help of  `Usync.extend()` or `Usync.proto
 
 <br/>
 
-# `Usync.extend(object)`
+## `Usync.extend(object)`
 - `object` An object consisting of one or more life cycle hook processing functions
 - `return value` null
 
@@ -203,7 +203,7 @@ In fact, this is the core part of implementing the plug-in [logger] (plugins/log
 
 <br/>
 
-# `Usync.prototype.extend(object)`
+## `Usync.prototype.extend(object)`
 - `object` An object consisting of one or more life cycle hook processing functions
 - `return value` null
 
@@ -212,7 +212,7 @@ Same to the `Usync.extend()`, the difference of them is that the `Usync.extend()
 
 <br/>
 
-# `Usync.plugin(plugin)`
+## `Usync.plugin(plugin)`
 - `plugin` Object | Function
 - `return value` null
 
