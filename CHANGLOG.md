@@ -1,5 +1,10 @@
 # Changelog
 
+`0.0.13` / 2017-7-16
+
+- Fix a build bug
+- Refactor code
+
 `0.0.12` / 2017-7-16
 
 - Fix a release bug

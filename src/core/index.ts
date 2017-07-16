@@ -23,11 +23,13 @@ export default class Usync {
     public __state__: number;
     public depth: number;
     public $parent: Usync;
+    public fulfilledBroadcast() {}
 
-    public fulfilledBroadcast() {
-    }
-
-    // Wait to reset value
+    /**
+     * Initialize a Usync APP
+     * @param state
+     * @param options
+     */
     constructor(state: IState, options?: IObject) {
 
         this.root = Array.isArray(state) ? state :
@@ -69,6 +71,11 @@ export default class Usync {
         return this.__name__
     }
 
+    /**
+     * Core method to add task
+     * @param handler
+     * @returns {Usync}
+     */
     public use(handler: IHandler | IHandler[]) {
 
         // Supoort Array syntax
@@ -98,6 +105,9 @@ export default class Usync {
         return this
     }
 
+    /**
+     * Run next task
+     */
     then() {
         // Add Support for time record
         this.currentDefferd.startTime = new Date().getTime()
@@ -137,12 +147,18 @@ export default class Usync {
         }
     }
 
+    /**
+     * Update root state
+     */
     setRootProperty() {
         this.root.$current = this.currentDefferd
         this.root.$prev = this.prevDefferd
         this.root.$next = this.nextDefferd
     }
 
+    /**
+     * the next()
+     */
     done() {
 
         this.currentDefferd.__state__ = STATE.FULFILLED
@@ -179,17 +195,30 @@ export default class Usync {
         }
     }
 
+    /**
+     * Error catch
+     * @param fn
+     * @returns {Usync}
+     */
     public catch(fn: (err: any) => any) {
         this.vessel.catch = fn;
         return this;
     }
 
+    /**
+     * A Usync application does not run automatically, start() must be called
+     */
     public start() {
         this.runHook(LIFE[LIFE.appStart], this.root)
         this.startTime = new Date().getTime()
         this.then()
     }
 
+    /**
+     * Run life cycle hook
+     * @param {String} name
+     * @param args
+     */
     runHook(name: string, ...args: IHookArgs) {
         let hookQuene = `${name}Quene`
         this.lifecycleMap[hookQuene].forEach(hook => hook.apply(this, args))
@@ -203,6 +232,10 @@ export default class Usync {
         return <ILifecycleMap>Object.getPrototypeOf(this).lifecycleMap;
     }
 
+    /**
+     * Extend through life cycle
+     * @param hooks
+     */
     public extend(hooks: ILifeCycle) {
         for (let key of Object.keys(this.lifecycleMap)) {
             let _key = key.replace('Quene', '')

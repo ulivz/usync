@@ -90,7 +90,11 @@ var STATE;
     STATE[STATE["REJECTED"] = 3] = "REJECTED";
 })(STATE || (STATE = {}));
 var Usync = (function () {
-    // Wait to reset value
+    /**
+     * Initialize a Usync APP
+     * @param state
+     * @param options
+     */
     function Usync(state, options) {
         this.vessel = {};
         this.lifecycleMap = lifeCycle_1.init();
@@ -107,8 +111,7 @@ var Usync = (function () {
         this.state = STATE.READY;
         this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.init], this);
     }
-    Usync.prototype.fulfilledBroadcast = function () {
-    };
+    Usync.prototype.fulfilledBroadcast = function () { };
     Object.defineProperty(Usync.prototype, "currentDefferd", {
         get: function () {
             return this.defferd[this.index];
@@ -141,6 +144,11 @@ var Usync = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Core method to add task
+     * @param handler
+     * @returns {Usync}
+     */
     Usync.prototype.use = function (handler) {
         // Supoort Array syntax
         if (Array.isArray(handler)) {
@@ -165,6 +173,9 @@ var Usync = (function () {
         }
         return this;
     };
+    /**
+     * Run next task
+     */
     Usync.prototype.then = function () {
         var _this = this;
         // Add Support for time record
@@ -198,11 +209,17 @@ var Usync = (function () {
             }
         }
     };
+    /**
+     * Update root state
+     */
     Usync.prototype.setRootProperty = function () {
         this.root.$current = this.currentDefferd;
         this.root.$prev = this.prevDefferd;
         this.root.$next = this.nextDefferd;
     };
+    /**
+     * the next()
+     */
     Usync.prototype.done = function () {
         this.currentDefferd.__state__ = STATE.FULFILLED;
         this.currentDefferd.endTime = new Date().getTime();
@@ -231,15 +248,28 @@ var Usync = (function () {
             this.then();
         }
     };
+    /**
+     * Error catch
+     * @param fn
+     * @returns {Usync}
+     */
     Usync.prototype.catch = function (fn) {
         this.vessel.catch = fn;
         return this;
     };
+    /**
+     * A Usync application does not run automatically, start() must be called
+     */
     Usync.prototype.start = function () {
         this.runHook(lifeCycle_1.LIFECYCLE[lifeCycle_1.LIFECYCLE.appStart], this.root);
         this.startTime = new Date().getTime();
         this.then();
     };
+    /**
+     * Run life cycle hook
+     * @param {String} name
+     * @param args
+     */
     Usync.prototype.runHook = function (name) {
         var _this = this;
         var args = [];
@@ -259,6 +289,10 @@ var Usync = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Extend through life cycle
+     * @param hooks
+     */
     Usync.prototype.extend = function (hooks) {
         for (var _i = 0, _a = Object.keys(this.lifecycleMap); _i < _a.length; _i++) {
             var key = _a[_i];
