@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/toxichl/usync/master/static/logo.svg" width="300" height="" style=""/>
+    <object src="https://raw.githubusercontent.com/toxichl/usync/master/static/logo.svg" width="300" height="" style=""/></object>
 </div>
 
 <br/>
