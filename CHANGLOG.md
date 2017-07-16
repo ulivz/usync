@@ -1,5 +1,9 @@
 # Changelog
 
+`0.0.15` / 2017-7-17
+
+- Remove some unuseful code
+
 `0.0.14` / 2017-7-16
 
 - Add logo
