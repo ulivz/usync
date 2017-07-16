@@ -12,7 +12,7 @@
 
 <br/>
 
-# Usync
+# usync
 
 The core of `Usync` is uniform serial execution, which can be run in browser or Node.js enviroment.
 
@@ -26,7 +26,7 @@ app.use([task1,task2,task3 ... ]).start()
 <br/>
 
 # Quick Start
-## install
+## Install
 
 ```js
 npm i usync -S
@@ -38,7 +38,7 @@ If you want to test Usync in the browser, you can use the CDN as follows:
 - [UNPKG](https://unpkg.com/usync/dist/) 
 - [jsDelivr](https://cdn.jsdelivr.net/npm/usync/dist/)
 
-## first usync app
+## First usync app
 
 ```js
 // Create a task whose name is 'Work'
@@ -68,9 +68,9 @@ app.start()
 
 <br/>
 
-# features
+# Features
 
-1. the type of subtask supports: Function / Usync / Promise / Async Function
+1. The type of subtask supports: `Function` / `Usync` / `Promise` / `Async Function`
 2. Provide Lifecycle Hook and Plugin mechanisms to facilitate extension
 3. Provide a root state (Root State) which is valid in the task life cycle by default
 
@@ -105,9 +105,9 @@ In addition, Usync initializes some values for the `root state`:
 
 attribute | description
 ---|---
-app.$current | Current task
-root.$prev | previous task
-root.$next | next task
+`app.$current` | Current task
+`root.$prev` | previous task
+`root.$next` | next task
 
 
 > Note: when the state is not set, the Usync constructor will generate a empty root state object by default
@@ -153,7 +153,7 @@ npm i && npm run example
 
 <br/>
 
-## life cycle
+## Life cycle
 
 The hook function of the life cycle provided by Usync is as follows:
 
@@ -170,10 +170,10 @@ The properties available on a task are as follows:
 
 Attribute | Description
 ---|---
-task.name| task's name
-task.$parent | task's parent
+`task.name` | task's name
+`task.$parent` | task's parent
 
-About how to use these hooks, need the help of  [Usync.extend()](# `Usync.extend(object)`) or [Usync.prototype.extend()](# `Usync.prototype.extend(object)`), please continue to look down.。
+About how to use these hooks, need the help of  `Usync.extend()` or `Usync.prototype.extend`, please continue to look down.。
 
 
 <br/>
@@ -219,5 +219,17 @@ Same to the `Usync.extend()`, the difference of them is that the `Usync.extend()
 
 You can refer to the implementation of [logger](plugins/logger.js)  to learn how to combine a lifecycle hook and plugin API to write a plug-in for `Usync`.
 
+
 <br/>
 
+## Badges
+
+[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
+
+
+<br/>
+
+## Author
+
+**usync** © [toxichl](https://github.com/toxichl/usync), Released under the [MIT](LICENSE) License.<br>
+Authored and maintained by toxichl with help from contributors [ [list](https://github.com/${authorName}/${projectName}/contributors) ].

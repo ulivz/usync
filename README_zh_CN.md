@@ -71,7 +71,7 @@ app.start()
 
 # 特性
 
-1. 子任务类型支持：Function / Usync / Promise / Async Function
+1. 子任务类型支持：`Function` / `Usync` / `Promise` / `Async Function`
 2. 提供生命周期钩子（Lifecycle Hook）和插件（Plugin）机制，方便拓展
 3. 默认支持任务生命周期内有效的根状态（Root State）
 
@@ -108,9 +108,9 @@ app.use(function task1(root) {
 
 属性|说明
 ---|---
-root.$current | 当前的task
-root.$prev | 上一个task
-root.$next | 下一个task
+`root.$current` | 当前的task
+`root.$prev` | 上一个task
+`root.$next` | 下一个task
 
 
 > 注意：当state参数未设定时，Usync构造器会默认生成一个root空对象。
@@ -170,22 +170,14 @@ Usync目前提供的生命周期的钩子函数如下：
 `taskStart` | `(root)` | 一个`task`开始运行之前 
 `taskEnd` | `(root)` | 一个`task`结束运行之前
 
-其中，root state上可用的属性如下：
-
-属性|说明
----|---
-root.$current | 当前的task
-root.$prev | 上一个task
-root.$next | 下一个task
-
 一个task上可用的属性如下：
 
 属性|说明
 ---|---
-task.name| task的name
-task.$parent | task的父代
+`task.name`| task的name
+`task.$parent`| task的父代
 
-关于如何使用这些钩子，需要借助 [Usync.extend()](# `Usync.extend(object)`) 或 [Usync.prototype.extend()](# `Usync.prototype.extend(object)`)，请继续往下看。
+关于如何使用这些钩子，需要借助 `Usync.extend()` 或者 `Usync.prototype.extend`，请继续往下看。
 
 
 <br/>
@@ -230,3 +222,18 @@ Usync.extend({
 `Usync`采用了和`Vue`一致的插件API设计，`Usync`的插件应当有一个公开方法`install`。该方法的第一个参数是`Usync`的构造器，第二个参数为可选的选项对象。
 
 可以参照 [logger](plugins/logger.js) 的实现来学习如何结合生命周期的钩子和plugin API来为`Usync`书写一个插件。
+
+
+<br/>
+
+## Badges
+
+[![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
+
+
+<br/>
+
+## Author
+
+**usync** © [toxichl](https://github.com/toxichl/usync), Released under the [MIT](LICENSE) License.<br>
+Authored and maintained by toxichl with help from contributors [ [list](https://github.com/${authorName}/${projectName}/contributors) ].
