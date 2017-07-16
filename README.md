@@ -1,7 +1,10 @@
 <p align="center">
-    <object src="https://raw.githubusercontent.com/toxichl/usync/master/static/logo.svg" width="300" height="" style=""/></object>
+    <img src="./static/logo.png" width="200" height="" style=""/>
 </div>
 
+
+
+im
 <br/>
 
 # usync
