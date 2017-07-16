@@ -1,6 +1,10 @@
 # Changelog
 
-`0.0.11` / 2017-7-16
+`0.0.12` / 2017-7-16
+
+- Fix a release bug
+
+`0.0.11` / 2017-7-15
 
 - Change the summary
 - Refactor the code style
