@@ -1,5 +1,9 @@
 # Changelog
 
+`0.0.16` / 2017-7-17
+
+- Update build
+
 `0.0.15` / 2017-7-17
 
 - Remove some unuseful code

@@ -4,7 +4,6 @@ var ora = require('ora')
 var webpackConf, env
 var log = require('./logger')
 var compile = require('./utils').webpackCompile
-var drawPackageName = require('./utils').drawPackageName
 
 var env
 
@@ -16,7 +15,7 @@ if (process.argv.indexOf(config.prod.argv) >= 0) {
     env = 'prod'
     webpackConf = require(conf(env))()
     compile(webpackConf)
-    compile(require(conf('dev'))(), drawPackageName)
+    compile(require(conf('dev'))())
 
 } else if (process.argv.indexOf(config.dev.argv) >= 0) {
     env = 'dev'

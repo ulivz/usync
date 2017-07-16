@@ -72,7 +72,7 @@ module.exports = function install(Usync, opts) {
     }
 
     let taskEndLog = function () {
-        return `Finished ${chalk.cyan(this.$current.name)} after ${chalk.magenta((this.$current.endTime - this.$current.startTime) + 'ms')}`
+        return `${chalk.red('Finished')} ${chalk.cyan(this.$current.name)} after ${chalk.magenta((this.$current.endTime - this.$current.startTime) + 'ms')}`
     }
 
     let hooks = {}

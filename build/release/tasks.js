@@ -22,7 +22,7 @@ function updateREADME(root, next) {
 
 function removeOldFiles(root, next) {
     root.exec('rm -rf ' + root.config.prod.output.path)
-    root.exec('mkdir' + root.config.prod.output.path)
+    root.exec('mkdir -p' + root.config.prod.output.path)
     next()
 }
 
@@ -33,7 +33,7 @@ function BuildLib(root, next) {
 
 function releaseToGithub(root, next) {
     root.exec('git add .')
-    root.exec('git commit -m "[Train Conductor] Release ' + root.argv.version + '"')
+    root.exec('git commit -m "[Build] Release ' + root.argv.version + '"')
     root.exec('git push')
     next()
 }
