@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __webpack_require__(3);
+// import {assign} from '../utils/index'
 var lifeCycle_1 = __webpack_require__(1);
 var STATE;
 (function (STATE) {
@@ -101,7 +101,7 @@ var Usync = (function () {
         this.root = Array.isArray(state) ? state :
             typeof state === 'string' ? ((this.setName(state)) && {}) :
                 typeof state === 'object' ? [state] : {};
-        options = index_1.assign({}, options);
+        // options = assign({}, options)
         if (options.name) {
             this.setName(options.name);
         }
@@ -374,7 +374,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * found in the LICENSE file at https://github.com/toxichl/usync/blob/master/LICENSE
  */
 var core_1 = __webpack_require__(0);
-var globalAPI_1 = __webpack_require__(4);
+var globalAPI_1 = __webpack_require__(3);
 globalAPI_1.default(core_1.default);
 module.exports = core_1.default;
 
@@ -386,40 +386,8 @@ module.exports = core_1.default;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function assign(target) {
-    var restOb = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        restOb[_i - 1] = arguments[_i];
-    }
-    if (target == null) {
-        throw new TypeError('Cannot convert undefined or null to object');
-    }
-    target = Object(target);
-    for (var index = 0; index < restOb.length; index++) {
-        var source = restOb[index];
-        if (source != null) {
-            for (var key in source) {
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-    }
-    return target;
-}
-exports.assign = assign;
-;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var plugin_1 = __webpack_require__(5);
-var extend_1 = __webpack_require__(6);
+var plugin_1 = __webpack_require__(4);
+var extend_1 = __webpack_require__(5);
 function initGlobalAPI(_Usync) {
     plugin_1.default(_Usync);
     extend_1.default(_Usync);
@@ -428,7 +396,7 @@ exports.default = initGlobalAPI;
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -448,7 +416,7 @@ exports.default = initPlugin;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -1,4 +1,4 @@
-import {assign} from '../utils/index'
+// import {assign} from '../utils/index'
 import {init as initlifeCycle, LIFECYCLE as LIFE} from './lifeCycle'
 import {IPlugin, IpluginOpts} from '../types/plugin'
 import {IObject, IState, IHandler, ILifeCycle, ILifecycleMap, IHookArgs} from '../types/baseType'
@@ -36,7 +36,7 @@ export default class Usync {
                 typeof state === 'string' ? ((this.setName(state)) && <IObject>{}) :
                 typeof state === 'object' ? [state] : <IObject>{}
 
-        options = assign({}, options)
+        // options = assign({}, options)
 
         if (<string>options.name) {
             this.setName(options.name)
