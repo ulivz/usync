@@ -6,15 +6,15 @@ var path = require('path')
 var figlet = require('figlet')
 
 function exec(command) {
-    log('info', 'Start ' + command)
     shell.exec(command)
-    log('success', 'End ' + command)
 }
 
 function exit(err) {
     if (err) {
         process.stdout.write(err)
+        console.log()
     }
+    console.log()
     process.exit(0)
 }
 

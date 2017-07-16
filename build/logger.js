@@ -1,6 +1,6 @@
 var chalk = require('chalk')
 
-const INDENT = '    '
+const INDENT = '- '
 const SPACE = ' '
 const WRAP = {
     defalut: '[*]'
@@ -20,7 +20,7 @@ const config = {
         {
             type: 'info',
             typeColor: 'cyanBright',
-            msgColor: 'gray'
+            msgColor: 'green'
         },
         {
             type: 'error',
@@ -50,9 +50,7 @@ const config = {
 }
 
 function log(msg) {
-    console.log()
     console.log(msg)
-    console.log()
 }
 
 function wrap(msg) {
