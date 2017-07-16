@@ -236,4 +236,4 @@ Usync.extend({
 ## Author
 
 **usync** © [toxichl](https://github.com/toxichl/usync), Released under the [MIT](LICENSE) License.<br>
-Authored and maintained by toxichl with help from contributors [ [list](https://github.com/${authorName}/${projectName}/contributors) ].
+Authored and maintained by toxichl with help from contributors [ [list](https://github.com/toxichl/usync/contributors) ].
