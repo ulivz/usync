@@ -2,9 +2,6 @@
   <a href="http://gulpjs.com">
     <img src="./static/logo.png" width="300" height="" style=""/>
   </a>
-  <p align="center" style="color: #adafb2">
-    <pre>Version 0.0.14</pre>
-  </p>
 </p>
 
 <br/>
