@@ -1,16 +1,11 @@
 # Changelog
 
-`0.0.16` / 2017-7-17
+`0.0.17`(From `0.0.14`) / 2017-7-17
 
-- Update build
-
-`0.0.15` / 2017-7-17
-
+- Enhance the build console
+- Update build, rewrite by `usync` itself (Nice!)
 - Remove some unuseful code
-
-`0.0.14` / 2017-7-16
-
-- Add logo
+- Add logo (Nice!)
 
 `0.0.13` / 2017-7-16
 
