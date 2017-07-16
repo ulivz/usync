@@ -5,7 +5,7 @@
          | |_| |\__ \| |_| || | | || (__
           \__,_||___/ \__, ||_| |_| \___|
                       |___/
-                  Version 0.0.9
+                  Version 0.0.10
     </pre>
 </div>
 
@@ -43,6 +43,7 @@ If you want to test Usync in the browser, you can use the CDN as follows:
 ## First usync app
 
 ```js
+var Usync = require('Usync')
 // Create a task whose name is 'Work'
 var app = Usync.app('Work')
 

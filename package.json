@@ -1,6 +1,6 @@
 {
   "name": "usync",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A lightweight library used for clearer task control",
   "main": "dist/Usync.js",
   "scripts": {
