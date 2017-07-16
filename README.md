@@ -22,6 +22,8 @@ In addition, it supports task segmentation and task tree design. The root task s
 app.use([task1,task2,task3 ... ]).start()
 ```
 
+> 中文请移步 [README_zh_CN](README_zh_CN.md)
+
 
 <br/>
 
