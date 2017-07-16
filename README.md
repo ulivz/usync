@@ -1,10 +1,7 @@
 <p align="center">
-    <img src="./static/logo.png" width="200" height="" style=""/>
+    <img src="./static/logo.png" width="300" height="" style=""/>
 </div>
 
-
-
-im
 <br/>
 
 # usync
