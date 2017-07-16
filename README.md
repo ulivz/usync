@@ -100,7 +100,7 @@ In addition, Usync initializes some values for the `root state`:
 
 attribute | description
 ---|---
-`app.$current` | Current task
+`root.$current` | Current task
 `root.$prev` | previous task
 `root.$next` | next task
 
@@ -121,7 +121,7 @@ app.use(task1).use(task2).use(task3)
 app.use([task1, task2, task3])
 ```
 
-The execution order of the above example is: `task1 => task2 => task3`。
+The execution order of the above examples is: `task1 => task2 => task3`。
 
 The example of `use()` usage can be seen in the following example:
 

@@ -1,6 +1,6 @@
 {
   "name": "usync",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A lightweight library used for serial task control",
   "main": "dist/Usync.js",
   "scripts": {
@@ -9,6 +9,10 @@
     "devtool": "devtool examples/index.js --watch",
     "example": "node examples/index.js",
     "help": "node build/help.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toxichl/usync.git"
   },
   "unpkg": "dist/Usync.js",
   "typings": "types/src/core/index.ts",
