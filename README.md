@@ -2,7 +2,7 @@
   <a href="http://gulpjs.com">
     <img src="./static/logo.png" width="300" height="" style=""/>
   </a>
-  <p align="center">Version 0.0.14</p>
+  <p align="center" style="color: #adafb2">Version 0.0.14</p>
 </p>
 
 <br/>

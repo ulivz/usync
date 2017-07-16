@@ -1,16 +1,12 @@
 <p align="center">
-    <pre style="background-color: #fff;">
-     _   _  ___  _   _  _ __    ___
-    | | | |/ __|| | | || '_ \  / __|
-    | |_| |\__ \| |_| || | | || (__
-     \__,_||___/ \__, ||_| |_| \___|
-                 |___/
-             Version 0.0.14
-    </pre>
-</div>
-
+  <a href="http://gulpjs.com">
+    <img src="./static/logo.png" width="300" height="" style=""/>
+  </a>
+  <p align="center" style="color: #adafb2">Version 0.0.14</p>
+</p>
 
 <br/>
+
 
 # 核心
 
