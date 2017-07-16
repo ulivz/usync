@@ -26,6 +26,19 @@ app.use([task1,task2,task3 ... ]).start()
 <br/>
 
 # 快速上手
+## 安装
+
+```js
+npm i usync -S
+// or
+yarn add usync
+```
+如果你想在浏览器中测试Usync，可以使用CDN:
+
+- [UNPKG](https://unpkg.com/usync/dist/) 
+- [jsDelivr](https://cdn.jsdelivr.net/npm/usync/dist/)
+
+## 第一个Usync APP
 
 ```js
 // 创建一个 name 为 'Work' 的任务
@@ -53,6 +66,7 @@ app.use([task1,task2,task3])
 app.start()
 ```
 
+
 <br/>
 
 # 特性
@@ -62,10 +76,12 @@ app.start()
 3. 默认支持任务生命周期内有效的根状态（Root State）
 
 
+<br/>
 
 # API
 
 
+<br/>
 
 # `Usync.app([state])`
 - `state` Array | Object | String
@@ -88,11 +104,11 @@ app.use(function task1(root) {
 });
 ```
 
-除此之外，Usync还初始化了一些值：
+除此之外，Usync还给root state初始化了一些值：
 
 属性|说明
 ---|---
-app.$current | 当前的task
+root.$current | 当前的task
 root.$prev | 上一个task
 root.$next | 下一个task
 
@@ -100,6 +116,7 @@ root.$next | 下一个task
 > 注意：当state参数未设定时，Usync构造器会默认生成一个root空对象。
 
 
+<br/>
 
 # `Usync.prototype.use(task)`
 - `task` Function | Usync | Promise | Async Function | Array
@@ -124,11 +141,9 @@ Promise | [Demo](examples/2_promise.js)
 Async/Await | [Demo](examples/3_async.js)
 Usync | [Demo](examples/4_task_tree.js)
 
-> 注意：当task需要为一个具名函数。和 [orchestrator](https://github.com/robrich/orchestrator) 以及依赖其的 [gulp](https://github.com/gulpjs/gulp) 的设计理念(`taskName`+`taskHandler`)不一样，Usync只需要一个`taskHandler`，Usync将会把该`taskHandler`的name作为该task的name。
+> 注意：当task需要为一个具名函数。和 [orchestrator](https://github.com/robrich/orchestrator) 以及依赖其的 [gulp](https://github.com/gulpjs/gulp) 的设计理念`(taskName, taskHandler)`不一样，Usync只需要一个`taskHandler`，Usync将会把该`taskHandler`的name作为该task的name。
 
-可以clone本项目运行example来查看默认的exmaple的运行结果：
-
-> 请注意：以下的log效果并不是Usync默认支持的，因为Usync core不会有任何`Node`或者`Browser`独有的API，这个`Colorful and indent console`是通过Usync的第一个插件 [logger](plugins/logger.js) 实现的。
+可以clone本项目, 来运行本项目提供的 [examples](examples)：
 
 ```
 git clone https://github.com/toxichl/usync.git
@@ -137,7 +152,10 @@ npm i && npm run example
 
 <img src="./static/example.gif"/>
 
+> 请注意：上述的log效果并不是Usync内置的，因为Usync core不会有任何`Node`或者`Browser`独有的API，这种log效果是通过Usync的一个插件 [logger](plugins/logger.js) 实现的。
 
+
+<br/>
 
 ## 生命周期
 
@@ -170,12 +188,13 @@ task.$parent | task的父代
 关于如何使用这些钩子，需要借助 [Usync.extend()](# `Usync.extend(object)`) 或 [Usync.prototype.extend()](# `Usync.prototype.extend(object)`)，请继续往下看。
 
 
+<br/>
 
 # `Usync.extend(object)`
-- `object` 一个或生命周期钩子处理函数组成的对象
+- `object` 一个或多个生命周期钩子处理函数组成的对象
 - `return value` 无
 
-`extend()` 接受一个包含一个或多个键值为 [生命周期钩子](#lifeCycle)， 键值为一个函数，其中，函数所传入的参数请参见上节。一个简单的`extend()` 例子如下：
+`extend()` 接受一个对象作为参数，该对象可以包含多个属性，属性名为 [生命周期钩子](#lifeCycle) 的名字， 属性值为一个处理函数，其中，处理函数支持的传入参数请参见上节。一个简单的`extend()`例子如下：
 
 ```js
 Usync.extend({
@@ -191,14 +210,16 @@ Usync.extend({
 实际上，这个就是实现插件 [logger](plugins/logger.js) 最核心的一部分，是否非常简单？
 
 
+<br/>
 
 # `Usync.prototype.extend(object)`
 - `object` 一个或生命周期钩子处理函数组成的对象
 - `return value` 无
 
-和`Usync.extend()`的功能一样，区别在于，`Usync.extend()`拓展的钩子函数将对所有的`UsyncApp`生效，而`Usync.prototype.extend()`仅对当前的`UsyncApp`生效。请根据不同的场景下灵活选择。
+和`Usync.extend()`的功能一样，区别在于，`Usync.extend()` 将会对所有的 `UsyncApp`生效，而 `Usync.prototype.extend()` 仅对当前的`UsyncApp`生效。请根据不同的场景下灵活选择。
 
 
+<br/>
 
 # `Usync.plugin(plugin)`
 - `plugin` Object | Function
@@ -209,13 +230,3 @@ Usync.extend({
 `Usync`采用了和`Vue`一致的插件API设计，`Usync`的插件应当有一个公开方法`install`。该方法的第一个参数是`Usync`的构造器，第二个参数为可选的选项对象。
 
 可以参照 [logger](plugins/logger.js) 的实现来学习如何结合生命周期的钩子和plugin API来为`Usync`书写一个插件。
-
-
-
-
-
-
-
-
-
-

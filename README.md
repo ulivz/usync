@@ -26,6 +26,19 @@ app.use([task1,task2,task3 ... ]).start()
 <br/>
 
 # Quick Start
+## install
+
+```js
+npm i usync -S
+// or
+yarn add usync
+```
+If you want to test Usync in the browser, you can use the CDN as follows:
+
+- [UNPKG](https://unpkg.com/usync/dist/) 
+- [jsDelivr](https://cdn.jsdelivr.net/npm/usync/dist/)
+
+## first usync app
 
 ```js
 // Create a task whose name is 'Work'
@@ -88,7 +101,7 @@ app.use(function task1(root) {
 });
 ```
 
-Besides, Usync also initializes some values:
+In addition, Usync initializes some values for the `root state`:
 
 attribute | description
 ---|---
@@ -97,38 +110,36 @@ root.$prev | previous task
 root.$next | next task
 
 
-> Note: when the state is not set, the Usync constructor will generate a root empty object by default
+> Note: when the state is not set, the Usync constructor will generate a empty root state object by default
 
-
+<br/>
 
 # `Usync.prototype.use(task)`
 - `task` Function | Usync | Promise | Async Function | Array
 - `return value` this
 
-该方法用于向Usync App中添加子任务。`use()`方法支持链式调用，也支持一个数组的传入。
+This method is used to add subtasks to the Usync App. The `use()` method supports chain calls and also supports the introduction of an array.
 
 ```js
 app.use(task1).use(task2).use(task3)
-// 等价于
+// Equivalent to
 app.use([task1, task2, task3])
 ```
 
-上述示例的执行顺序为: `task1 => task2 => task3`。
+The execution order of the above example is: `task1 => task2 => task3`。
 
-`use()`的使用示例可以参见以下示例：
+The example of `use()` usage can be seen in the following example:
 
-类型|示例
+Type | Example
 ---|---
 Function | [Demo](examples/1_function.js)
 Promise | [Demo](examples/2_promise.js)
 Async/Await | [Demo](examples/3_async.js)
 Usync | [Demo](examples/4_task_tree.js)
 
-> 注意：当task需要为一个具名函数。和 [orchestrator](https://github.com/robrich/orchestrator) 以及依赖其的 [gulp](https://github.com/gulpjs/gulp) 的设计理念(`taskName`+`taskHandler`)不一样，Usync只需要一个`taskHandler`，Usync将会把该`taskHandler`的name作为该task的name。
+> Note: The task needs to be a named function. Unlike the design philosophy `(taskName, taskHandler)` of [orchestrator](https://github.com/robrich/orchestrator) and its [gulp](https://github.com/gulpjs/gulp)  , Usync requires only one `taskHandler`, and Usync will use the name of `taskHandler` as the task's name.
 
-可以clone本项目运行example来查看默认的exmaple的运行结果：
-
-> 请注意：以下的log效果并不是Usync默认支持的，因为Usync core不会有任何`Node`或者`Browser`独有的API，这个`Colorful and indent console`是通过Usync的第一个插件 [logger](plugins/logger.js) 实现的。
+You can run the [examples](examples) provided by this project with `git clone`：
 
 ```
 git clone https://github.com/toxichl/usync.git
@@ -137,45 +148,41 @@ npm i && npm run example
 
 <img src="./static/example.gif"/>
 
+> Note：The above log effect is not built-in at Usync ，Because Usync core doesn't have any  unique API of `Node` or `Browser`. This log effect is implemented through a plug-in [logger](plugins/logger.js) of Usync.
 
 
-## 生命周期
+<br/>
 
-Usync目前提供的生命周期的钩子函数如下：
+## life cycle
 
-钩子 | 参数 |描述
+The hook function of the life cycle provided by Usync is as follows:
+
+Hook | Parameter | Description
 ---|---|---
-`init` | `(UsyncApp)` | 在一个UsyncApp创建结束之前
-`beforeUse` | `(UsyncApp, task)` | 在一个 task 即将被一个 UsyncApp use 之前
-`appStart` | `(root)` | 一个`Usync app`开始运行之前 
-`appEnd` | `(root)` | 一个`Usync app`结束运行之前 
-`taskStart` | `(root)` | 一个`task`开始运行之前 
-`taskEnd` | `(root)` | 一个`task`结束运行之前
+`init` | `(UsyncApp)` | Before the end of an `Usync app` creation
+`beforeUse` | `(UsyncApp, task)` | Before a task is going to be used in a `Usync app`
+`appStart` | `(root)` | Before a `Usync app` starts running
+`appEnd` | `(root)` | Before a `Usync app` is finished running
+`taskStart` | `(root)` | Before a `task` starts running
+`taskEnd` | `(root)` | Before a `task` is finished running
 
-其中，root state上可用的属性如下：
+The properties available on a task are as follows:
 
-属性|说明
+Attribute | Description
 ---|---
-root.$current | 当前的task
-root.$prev | 上一个task
-root.$next | 下一个task
+task.name| task's name
+task.$parent | task's parent
 
-一个task上可用的属性如下：
-
-属性|说明
----|---
-task.name| task的name
-task.$parent | task的父代
-
-关于如何使用这些钩子，需要借助 [Usync.extend()](# `Usync.extend(object)`) 或 [Usync.prototype.extend()](# `Usync.prototype.extend(object)`)，请继续往下看。
+About how to use these hooks, need the help of  [Usync.extend()](# `Usync.extend(object)`) or [Usync.prototype.extend()](# `Usync.prototype.extend(object)`), please continue to look down.。
 
 
+<br/>
 
 # `Usync.extend(object)`
-- `object` 一个或生命周期钩子处理函数组成的对象
-- `return value` 无
+- `object` An object consisting of one or more life cycle hook processing functions
+- `return value` null
 
-`extend()` 接受一个包含一个或多个键值为 [生命周期钩子](#lifeCycle)， 键值为一个函数，其中，函数所传入的参数请参见上节。一个简单的`extend()` 例子如下：
+`extend ()` accept an object as parameters, the object can contain multiple attributes, the attribute name for life cycle's name, the attribute value is a handler function, About the incoming parameter of handler function, please see last section. A simple `extend()` example is as follows:
 
 ```js
 Usync.extend({
@@ -188,34 +195,29 @@ Usync.extend({
 })
 ```
 
-实际上，这个就是实现插件 [logger](plugins/logger.js) 最核心的一部分，是否非常简单？
+In fact, this is the core part of implementing the plug-in [logger] (plugins/logger.js). Is it very simple?
 
 
+<br/>
 
 # `Usync.prototype.extend(object)`
-- `object` 一个或生命周期钩子处理函数组成的对象
-- `return value` 无
+- `object` An object consisting of one or more life cycle hook processing functions
+- `return value` null
 
-和`Usync.extend()`的功能一样，区别在于，`Usync.extend()`拓展的钩子函数将对所有的`UsyncApp`生效，而`Usync.prototype.extend()`仅对当前的`UsyncApp`生效。请根据不同的场景下灵活选择。
+Same to the `Usync.extend()`, the difference of them is that the `Usync.extend()` will influence all the `UsyncApp`, But `Usync.prototype.extend()` is only valid for the current `UsyncApp`. Please choose flexibly according to different scenes.
 
 
+<br/>
 
 # `Usync.plugin(plugin)`
 - `plugin` Object | Function
-- `return value` 无
+- `return value` null
 
-> 插件的API设计灵感来自 [Vue](https://cn.vuejs.org/v2/guide/plugins.html)
+> The plug-in's API design is inspired by [Vue](https://cn.vuejs.org/v2/guide/plugins.html)
 
-`Usync`采用了和`Vue`一致的插件API设计，`Usync`的插件应当有一个公开方法`install`。该方法的第一个参数是`Usync`的构造器，第二个参数为可选的选项对象。
+`Usync` uses a plug-in API design that is consistent with `Vue`, and the `Usync` plug-in should have an open method, `install`. The first parameter of this method is the constructor of the `Usync`, and the second parameter is the optional option object.
 
-可以参照 [logger](plugins/logger.js) 的实现来学习如何结合生命周期的钩子和plugin API来为`Usync`书写一个插件。
+You can refer to the implementation of [logger](plugins/logger.js)  to learn how to combine a lifecycle hook and plugin API to write a plug-in for `Usync`.
 
-
-
-
-
-
-
-
-
+<br/>
 
