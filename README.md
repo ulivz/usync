@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://gulpjs.com">
+  <a href="https://github.com/ulivz/usync">
     <img src="./static/logo.png" width="300" height="" style=""/>
   </a>
 </p>

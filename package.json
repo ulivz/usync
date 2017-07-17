@@ -1,6 +1,6 @@
 {
   "name": "usync",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "A lightweight library used for serial task control",
   "main": "dist/Usync.js",
   "scripts": {

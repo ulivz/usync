@@ -1,15 +1,16 @@
+'use strict';
+
 // ***************************************************
 // Colorful and friendly console plugin for Usync
 // ***************************************************
-
-var chalk = require('chalk')
+let chalk = require('chalk')
 
 /**
  * Add current time prefix the content
  * @param content
  */
 function addTimeNowPrefix(content) {
-    var time = new Date().toLocaleTimeString()
+    let time = new Date().toLocaleTimeString()
     return `${chalk.gray(time)}  ${content}`
 }
 
@@ -19,7 +20,7 @@ function addTimeNowPrefix(content) {
  * @returns {string}
  */
 function getIndentByCount(depth) {
-    var indent = ''
+    let indent = ''
     while (depth > 0) {
         indent += '   '
         depth--
@@ -37,7 +38,7 @@ function getDepth(task) {
 }
 
 /**
- * A recursive function to define 
+ * A recursive function to define
  * @param parent
  * @param child
  * @param Usync

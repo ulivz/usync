@@ -1,5 +1,9 @@
 # Changelog
 
+`0.0.18` / 2017-7-17
+
+- Fix a bug of logger plugin
+
 `0.0.17`(From `0.0.14`) / 2017-7-17
 
 - Enhance the build console
