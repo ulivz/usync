@@ -7,7 +7,7 @@
 <br/>
 
 [![NPM version](https://img.shields.io/npm/v/usync.svg?style=flat)](https://npmjs.com/package/usync) [![NPM downloads](https://img.shields.io/npm/dm/usync.svg?style=flat)](https://npmjs.com/package/usync) 
-[![Build status](https://img.shields.io/travis/toxichl/usync.svg?style=flat)](https://npmjs.com/package/usync)  
+[![Build status](https://img.shields.io/travis/toxichl/usync.svg?style=flat)](https://npmjs.com/package/usync) [![Greenkeeper badge](https://badges.greenkeeper.io/ulivz/usync.svg)](https://greenkeeper.io/)  
 
 # usync
 
